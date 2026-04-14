@@ -1,0 +1,1 @@
+mongodb+srv://tourism_user:<db_password>@cluster0.8ctcmrf.mongodb.net/indian-tourism?retryWrites=true&w=majority

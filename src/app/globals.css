@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+:root {
+    --background: #ffffff;
+    --foreground: #364d59;
+    --primary: #efba6c;
+    --primary-foreground: #ffffff;
+    --card: #ffffff;
+    --card-foreground: #364d59;
+    --popover: #ffffff;
+    --popover-foreground: #364d59;
+    --secondary: #f8f9fa;
+    --secondary-foreground: #364d59;
+    --muted: #f8f9fa;
+    --muted-foreground: #6c757d;
+    --accent: #efba6c;
+    --accent-foreground: #ffffff;
+    --destructive: #dc3545;
+    --destructive-foreground: #ffffff;
+    --border: #e9ecef;
+    --input: #e9ecef;
+    --ring: #efba6c;
+    --radius: 0.5rem;
+}
+
+.dark {
+    --background: #0a0010;
+    --foreground: #f0e6ff;
+    --primary: #9333ea;
+    --primary-foreground: #ffffff;
+    --card: rgba(255, 255, 255, 0.04);
+    --card-foreground: #f0e6ff;
+    --border: rgba(255, 255, 255, 0.1);
+}
+
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-border: var(--border);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --font-sans: 'Work Sans', sans-serif;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: 'Work Sans', sans-serif;
+    overflow-x: hidden;
+}
+
+/* Trips-Specific Styles */
+.hero-title {
+    font-weight: 900;
+    font-size: clamp(3rem, 10vw, 5.5rem);
+    line-height: 1;
+    color: #ffffff;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.hero-overlay {
+    background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.7) 100%);
+}
+
+.nav-link {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    color: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.section-watermark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: clamp(5rem, 15vw, 10rem);
+    font-weight: 900;
+    color: rgba(0, 0, 0, 0.05);
+    z-index: -1;
+    pointer-events: none;
+    user-select: none;
+    text-transform: uppercase;
+    transform: translateY(-20%);
+}
+
+.accent-gold {
+    color: #efba6c;
+}
+
+.bg-gold {
+    background-color: #efba6c;
+}
+
+/* Glassmorphism Classes */
+.glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-dark {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Animations from Spotlight */
+@keyframes spotlight {
+    0% {
+        opacity: 0;
+        transform: translate(-72%, -62%) scale(0.5);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -40%) scale(1);
+    }
+}
+
+.animate-spotlight {
+    animation: spotlight 2s ease .75s 1 forwards;
+}
+
+/* Loader for Spline fallback */
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #efba6c;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
