@@ -1,62 +1,25 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '@/store/authStore';
 import { Sidebar } from '@/components/dashboard/Sidebar';
 import { DashboardNavbar } from '@/components/dashboard/DashboardNavbar';
-import { TOURISM_SPOTS } from '@/data/tourismData';
 import { STATES } from '@/data/statesData';
-import { DESTINATIONS } from '@/data/destinations';
-import { Heart, MapPin, Star, TrendingUp, Calendar, Compass, Bookmark } from 'lucide-react';
+import { Heart, MapPin, Star, TrendingUp, Calendar, Bookmark } from 'lucide-react';
 
 /**
- * Senior Developer Refactor: 
- * Pure helper function to dynamically select recommendations based on ratings and user mood.
- * Follows DRY principles and ensures a single source of truth from destinations.ts.
+ * Helper to shuffle and pick 4 states from the 31 states pool.
  */
-/**
- * Senior Developer Fix (Robust Edition): 
- * Ensures recommendations always display by:
- * 1. Handling case-insensitive mood matches (e.g. "happy" vs "Happy")
- * 2. Safely handles saved items whether they are strings or objects
- * 3. Provides an absolute fallback to ensure a non-empty UI
- */
-function getRecommendedPlaces(
-  allPlaces: any[] = [], 
-  savedSlugs: any[] = [], 
-  preferredMood: string | null = null
-): any[] {
-  // 1. Core safety check
-  if (!allPlaces || allPlaces.length === 0) return [];
-
-  // 2. Normalize saved items - handle mix of strings and objects from DB
-  const normalizedSaved = savedSlugs.map(s => (typeof s === 'string' ? s : s?.slug)).filter(Boolean);
-  
-  // 3. Normalize preferred mood for case-insensitive comparison
-  const targetMood = preferredMood?.toLowerCase();
-
-  // 4. Create pool of available destinations (not already saved)
-  const pool = allPlaces.filter(d => !normalizedSaved.includes(d.slug));
-  
-  // 5. Identify matches for the user's mood (Case-Insensitive)
-  // Support both 'moodMatch' (Landmarks) and 'moods' (States)
-  const moodMatches = targetMood 
-    ? pool.filter(d => {
-        const moods = d.moodMatch || d.moods || [];
-        return moods.some((m: string) => m.toLowerCase() === targetMood);
-      })
-    : [];
-
-  // 6. Subtract mood matches from pool to get the "others"
-  const others = pool.filter(p => !moodMatches.find(m => m.slug === p.slug));
-
-  // 7. Combine results, prioritizing mood
-  const finalResults = [...moodMatches, ...others].slice(0, 4);
-  
-  // 8. ABSOLUTE FALLBACK: If pool was empty (user saved everything), return first 4 of all destinations
-  return finalResults.length > 0 ? finalResults : allPlaces.slice(0, 4);
+function getShuffledRecommendations(allStates: any[] = []): any[] {
+  if (!allStates || allStates.length === 0) return [];
+  const pool = [...allStates];
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return pool.slice(0, 4);
 }
 
 export default function DashboardPage() {
@@ -64,8 +27,6 @@ export default function DashboardPage() {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  
-  // Real-time states
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -73,25 +34,28 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => {
-    // Only fetch auth if we don't have a user and aren't already loading
     if (!user && !isLoading) {
       checkAuth();
     }
-  }, [user]); // Only depend on user presence
+  }, [user]);
 
   useEffect(() => {
-    // Only redirect if explicitly not loading and user is definitely null after check
     if (!isLoading && !user) {
       router.push('/login');
     }
   }, [user, isLoading, router]);
+
+  // Shuffle every time the user enters (on mount/user change)
+  const recommended = useMemo(() => {
+    return getShuffledRecommendations(STATES);
+  }, [user?.id]); 
 
   if (isLoading || !isClient) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin" />
-          <p className="text-sm font-bold text-gray-500">Loading your dashboard...</p>
+          <p className="text-sm font-bold text-gray-500">Loading your profile...</p>
         </div>
       </div>
     );
@@ -101,22 +65,7 @@ export default function DashboardPage() {
 
   const firstName = user.name?.split(' ')[0] || 'Traveler';
 
-  // Compute real data
-
-  // Senior Developer Refactor: Dynamic Recommendations aligned with 'Destinations' (STATES)
-  const savedSlugs = user.favoriteDestinations || [];
-  const recommended = getRecommendedPlaces(STATES, savedSlugs, user.preferredMood);
-
-  // Get Saved Destinations (Both States and specific spots)
-  const savedStates = STATES.filter(s => savedSlugs.includes(s.slug));
-  const savedLandmarks = DESTINATIONS.filter(d => savedSlugs.includes(d.slug));
-  
-  // Combine for display (States first)
-  const allSaved = [
-    ...savedStates.map(s => ({ ...s, type: 'state' })),
-    ...savedLandmarks.map(d => ({ ...d, type: 'destination' }))
-  ];
-
+  // Dynamic travel statistics updated from journal
   const travelStats = {
     visited: user.travelJournal?.length || 0,
     saved: user.favoriteDestinations?.length || 0,
@@ -126,9 +75,11 @@ export default function DashboardPage() {
       : 'N/A'
   };
 
+  const savedSlugs = user.favoriteDestinations || [];
+  const savedStates = STATES.filter(s => savedSlugs.includes(s.slug));
+
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden">
-      {/* Sidebar */}
+    <div className="flex h-screen bg-slate-50 overflow-hidden font-sans">
       <div className="hidden lg:flex flex-shrink-0 z-30">
         <Sidebar isOpen={true} onClose={() => {}} />
       </div>
@@ -136,7 +87,6 @@ export default function DashboardPage() {
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       </div>
 
-      {/* Main */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <DashboardNavbar
           onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
@@ -145,252 +95,195 @@ export default function DashboardPage() {
         />
 
         <main className="flex-1 overflow-y-auto pb-12">
-          {/* Welcome Header */}
-          <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-12 px-6">
-            <div className="max-w-6xl mx-auto">
+          {/* Welcome Section */}
+          <section className="bg-gradient-to-br from-indigo-700 via-blue-600 to-violet-600 text-white py-16 px-8 relative overflow-hidden">
+            <div className="max-w-6xl mx-auto relative z-10">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="flex items-center gap-6"
+                initial={{ opacity: 0, x: -25 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
               >
-                <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center text-3xl font-bold">
-                  {firstName.charAt(0).toUpperCase()}
+                <div className="flex items-center gap-4 mb-4">
+                  <span className="px-4 py-1.5 bg-white/10 backdrop-blur-lg rounded-full text-[10px] font-black uppercase tracking-widest border border-white/20">Explorer Central</span>
                 </div>
-                <div>
-                  <h1 className="text-3xl font-black mb-2">Welcome back, {firstName}! 👋</h1>
-                  <p className="text-blue-100">Ready to discover your next adventure?</p>
-                </div>
+                <h1 className="text-6xl font-black mb-2 tracking-tighter">Namaste, {firstName}! 🌿</h1>
+                <p className="text-xl text-blue-100 font-medium max-w-2xl opacity-90">
+                  Your Indian travel journey is unique. Track visits, rate experiences, and plan more.
+                </p>
               </motion.div>
             </div>
+            <div className="absolute top-0 right-0 w-1/3 h-full bg-white/5 skew-x-12 translate-x-20"></div>
           </section>
 
-          {/* User Profile Card */}
-          <section className="py-8 px-6">
+          {/* User Profile Overview */}
+          <section className="py-10 px-6 -mt-12">
             <div className="max-w-6xl mx-auto">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
+                transition={{ delay: 0.2 }}
+                className="bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 p-8 flex flex-col md:flex-row items-center gap-10"
               >
-                <div className="flex items-center gap-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                <div className="relative group">
+                  <div className="w-24 h-24 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-3xl rotate-6 flex items-center justify-center text-white text-4xl font-black shadow-xl transition-transform group-hover:rotate-0">
                     {firstName.charAt(0).toUpperCase()}
                   </div>
-                  <div className="flex-1">
-                    <h2 className="text-xl font-bold text-gray-900">{user.name}</h2>
-                    <p className="text-gray-600">{user.email}</p>
-                    <div className="flex items-center gap-4 mt-2">
-                      <div className="flex items-center gap-1 text-sm text-gray-500">
-                        <MapPin className="w-4 h-4" />
-                        <span>India</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-sm text-gray-500">
-                        <Calendar className="w-4 h-4" />
-                        <span>Joined recently</span>
-                      </div>
+                </div>
+                <div className="flex-1 text-center md:text-left">
+                  <h2 className="text-3xl font-black text-gray-900 tracking-tight">{user.name}</h2>
+                  <p className="text-gray-500 font-semibold mb-4 tracking-wide">{user.email}</p>
+                  <div className="flex flex-wrap justify-center md:justify-start gap-4">
+                    <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-2xl text-xs font-black uppercase tracking-wider">
+                      <MapPin className="w-4 h-4" /> INDIA
+                    </div>
+                    <div className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-2xl text-xs font-black uppercase tracking-wider">
+                      <Calendar className="w-4 h-4" /> ACTIVE SINCE 2024
                     </div>
                   </div>
-                  <button className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition-colors">
-                    Edit Profile
-                  </button>
                 </div>
+                <button className="px-10 py-5 bg-gray-900 text-white font-black rounded-3xl hover:bg-black transition-all shadow-xl hover:-translate-y-1 active:translate-y-0 uppercase tracking-widest text-sm">
+                  User Profile
+                </button>
               </motion.div>
             </div>
           </section>
 
-          {/* Travel Statistics */}
-          <section className="py-8 px-6">
+          {/* Updated Stats with Journal Logic */}
+          <section className="py-6 px-6">
             <div className="max-w-6xl mx-auto">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-              >
-                <h2 className="text-2xl font-black text-gray-900 mb-6">Your Travel Stats</h2>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <MapPin className="w-5 h-5 text-blue-600" />
-                      </div>
-                      <div>
-                        <p className="text-2xl font-bold text-gray-900">{travelStats.visited}</p>
-                        <p className="text-sm text-gray-600">Destinations Visited</p>
-                      </div>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  { label: 'Destinations Visited', value: travelStats.visited, icon: MapPin, color: 'blue' },
+                  { label: 'Saved Places', value: travelStats.saved, icon: Heart, color: 'rose' },
+                  { label: 'Average Rating', value: travelStats.rating, icon: Star, color: 'amber' },
+                  { label: 'Reviews Written', value: travelStats.reviews, icon: TrendingUp, color: 'emerald' }
+                ].map((stat, i) => (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 + i * 0.1 }}
+                    className="bg-white rounded-3xl p-8 shadow-sm border border-gray-50 group hover:bg-slate-50 transition-all border-b-4 border-b-transparent hover:border-b-blue-600"
+                  >
+                    <div className={`w-12 h-12 rounded-2xl bg-${stat.color}-50 flex items-center justify-center mb-6 transition-all group-hover:scale-110`}>
+                      <stat.icon className={`w-6 h-6 text-${stat.color}-500`} />
                     </div>
-                  </div>
-                  <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                        <Heart className="w-5 h-5 text-green-600" />
-                      </div>
-                      <div>
-                        <p className="text-2xl font-bold text-gray-900">{travelStats.saved}</p>
-                        <p className="text-sm text-gray-600">Saved Places</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                        <Star className="w-5 h-5 text-purple-600" />
-                      </div>
-                      <div>
-                        <p className="text-2xl font-bold text-gray-900">{travelStats.rating}</p>
-                        <p className="text-sm text-gray-600">Average Rating</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
-                        <TrendingUp className="w-5 h-5 text-orange-600" />
-                      </div>
-                      <div>
-                        <p className="text-2xl font-bold text-gray-900">{travelStats.reviews}</p>
-                        <p className="text-sm text-gray-600">Reviews Written</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
+                    <p className="text-4xl font-black text-gray-900 mb-1 tracking-tighter">{stat.value}</p>
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{stat.label}</p>
+                  </motion.div>
+                ))}
+              </div>
             </div>
-          </section>          {/* Saved Destinations */}
-          <section className="py-8 px-6">
+          </section>
+
+          {/* Recommended Section (Pulling only 4 from 31 States) */}
+          <section className="py-12 px-6">
             <div className="max-w-6xl mx-auto">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.6 }}
-              >
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-black text-gray-900 flex items-center gap-2">
-                    <Bookmark className="w-6 h-6 text-black fill-current" />
-                    Saved Destinations
-                  </h2>
+              <div className="flex items-center justify-between mb-10">
+                <div>
+                  <h2 className="text-3xl font-black text-gray-900 tracking-tighter uppercase">Recommended For You</h2>
+                  <div className="h-1.5 w-32 bg-blue-600 rounded-full mt-2"></div>
                 </div>
-                
-                {allSaved.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {allSaved.map((item: any, index) => (
-                      <motion.div
-                        key={item.slug}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1, duration: 0.4 }}
-                        className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 cursor-pointer group hover:shadow-md transition-shadow"
-                        onClick={() => router.push(`/destinations/${item.slug}`)}
-                      >
-                        <div className="relative h-48 overflow-hidden bg-gray-200">
-                          <img 
-                            src={item.image || item.heroImage} 
-                            alt={item.name} 
-                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
-                          />
-                          <div className="absolute top-3 left-3">
-                            <div className="bg-black/80 backdrop-blur text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
-                              {item.type === 'state' ? 'State' : 'Landmark'}
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {recommended.map((item, index) => (
+                  <motion.div
+                    key={item.slug + index}
+                    whileHover={{ scale: 1.05, y: -10 }}
+                    className="bg-white rounded-[3rem] overflow-hidden shadow-sm border border-gray-100 cursor-pointer group hover:shadow-2xl transition-all duration-500"
+                    onClick={() => router.push(`/destinations/${item.slug}`)}
+                  >
+                    <div className="relative h-64 overflow-hidden">
+                      <img 
+                        src={item.image || item.heroImage} 
+                        alt={item.name} 
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
+                      />
+                      <div className="absolute top-5 left-5">
+                        <span className="bg-white text-blue-600 px-4 py-1.5 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl">STATE</span>
+                      </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end p-8">
+                        <span className="text-white font-black text-sm uppercase tracking-widest border-b-2 border-white pb-1">Explore State</span>
+                      </div>
+                    </div>
+                    <div className="p-8">
+                      <h3 className="font-black text-gray-900 text-xl mb-3 line-clamp-1 group-hover:text-blue-600 transition-colors tracking-tighter uppercase">{item.name}</h3>
+                      <p className="text-sm text-gray-500 line-clamp-2 font-medium leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Saved Destinations */}
+          <section className="py-12 px-6 bg-slate-50">
+            <div className="max-w-6xl mx-auto">
+              <div className="flex items-center gap-4 mb-10">
+                <div className="bg-black p-3 rounded-2xl">
+                    <Bookmark className="w-6 h-6 text-white fill-current" />
+                </div>
+                <h2 className="text-3xl font-black text-gray-900 tracking-tighter uppercase">Saved Escapes</h2>
+              </div>
+              
+              {savedStates.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                  {savedStates.map((item: any, index) => (
+                    <motion.div
+                      key={item.slug}
+                      whileHover={{ y: -5 }}
+                      className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 cursor-pointer hover:shadow-xl transition-all group"
+                      onClick={() => router.push(`/destinations/${item.slug}`)}
+                    >
+                      <div className="relative h-44 overflow-hidden">
+                        <img 
+                          src={item.image || item.heroImage} 
+                          alt={item.name} 
+                          className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 font-sans" 
+                        />
+                         <div className="absolute top-3 right-3">
+                            <div className="bg-white/90 backdrop-blur text-black p-2.5 rounded-2xl shadow-lg">
+                                <Bookmark className="w-4 h-4 fill-black" />
                             </div>
-                          </div>
-                        </div>
-                        <div className="p-4">
-                          <h3 className="font-bold text-gray-900 mb-1 line-clamp-1">{item.name}</h3>
-                          <p className="text-xs text-gray-500 line-clamp-1">
-                            {item.state || 'Indian State'}
-                          </p>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="bg-white border text-center border-dashed border-gray-300 rounded-2xl p-10 flex flex-col items-center justify-center">
-                    <div className="w-16 h-16 bg-gray-50 text-gray-400 rounded-full flex items-center justify-center mb-4">
-                      <Bookmark className="w-8 h-8" />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Save your favorite spots</h3>
-                    <p className="text-gray-500 max-w-md">Click the bookmark icon on any destination to keep track of where you want to go next.</p>
-                  </div>
-                )}
-              </motion.div>
-            </div>
-          </section>
-
-
-
-
-          <section className="py-8 px-6">
-            <div className="max-w-6xl mx-auto">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 0.6 }}
-              >
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-black text-gray-900">Recommended For You</h2>
+                         </div>
+                      </div>
+                      <div className="p-6">
+                        <h3 className="font-black text-gray-900 line-clamp-1 uppercase tracking-tighter">{item.name}</h3>
+                        <p className="text-[10px] text-blue-600 font-black mt-1 uppercase tracking-[0.2em]">VIEW SAVED DETAILS</p>
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
-                
-                {recommended.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {recommended.map((item, index) => (
-                      <motion.div
-                        key={item.slug}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1, duration: 0.4 }}
-                        className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 cursor-pointer group hover:shadow-md transition-shadow"
-                        onClick={() => router.push(`/destinations/${item.slug}`)}
-                      >
-                        <div className="relative h-48 overflow-hidden bg-gray-200">
-                          <img 
-                            src={item.image || item.heroImage} 
-                            alt={item.name} 
-                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
-                          />
-                          <div className="absolute top-3 left-3">
-                            <div className="bg-blue-600/90 backdrop-blur text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
-                              State
-                            </div>
-                          </div>
-                        </div>
-                        <div className="p-4">
-                          <h3 className="font-bold text-gray-900 mb-1 line-clamp-1">{item.name}</h3>
-                          <p className="text-xs text-gray-500 line-clamp-1">
-                            {item.description}
-                          </p>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="bg-white border text-center border-dashed border-gray-300 rounded-2xl p-10 flex flex-col items-center justify-center">
-                    <p className="text-gray-500">Update your travel preferences to get personalized recommendations.</p>
-                  </div>
-                )}
-              </motion.div>
+              ) : (
+                <div className="bg-white border-4 border-dashed border-gray-200 rounded-[3rem] p-20 text-center">
+                  <Bookmark className="w-16 h-16 text-gray-200 mx-auto mb-8" />
+                  <h3 className="text-3xl font-black text-gray-900 mb-3 tracking-tighter uppercase">No Saved Journeys</h3>
+                  <p className="text-gray-500 font-medium mb-10 max-w-sm mx-auto">Unlock the secrets of India. Bookmark your dream states to begin your collection.</p>
+                  <button onClick={() => router.push('/destinations')} className="px-10 py-4 bg-blue-600 text-white font-black rounded-2xl hover:bg-blue-700 transition-all shadow-xl hover:-translate-y-1 uppercase tracking-widest text-xs">Browse States</button>
+                </div>
+              )}
             </div>
           </section>
 
-          {/* Quick Actions */}
-          <section className="py-8 px-6">
+          {/* Final Call to Action */}
+          <section className="py-24 px-6">
             <div className="max-w-6xl mx-auto">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7, duration: 0.6 }}
-                className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8"
-              >
-                <h2 className="text-2xl font-black text-gray-900 mb-6 text-center">Ready for your next adventure?</h2>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="bg-blue-900 rounded-[4rem] p-16 text-center relative overflow-hidden group shadow-3xl">
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
+                
+                <h2 className="text-5xl font-black text-white mb-8 tracking-tighter uppercase relative z-10 leading-none">The map is yours. <br/><span className="text-blue-400">Mark your territory.</span></h2>
+                <div className="flex flex-col sm:flex-row gap-5 justify-center relative z-10">
                   <button
                     onClick={() => router.push('/destinations')}
-                    className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-lg hover:shadow-lg transition-shadow"
+                    className="px-12 py-6 bg-white text-gray-900 font-black rounded-3xl hover:bg-blue-50 transition-all shadow-2xl hover:-translate-y-2 uppercase tracking-widest text-sm"
                   >
-                    Discover New Places
+                    Explore 31 States
                   </button>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </section>
         </main>
