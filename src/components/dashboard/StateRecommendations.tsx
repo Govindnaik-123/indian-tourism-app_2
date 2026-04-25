@@ -73,6 +73,7 @@ export const StateRecommendations: React.FC<StateRecommendationsProps> = ({
                   <img
                     src={state.image}
                     alt={state.name}
+                    loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = `https://source.unsplash.com/600x400/?india,${state.name}`;

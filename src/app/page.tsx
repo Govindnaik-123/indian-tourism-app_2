@@ -195,6 +195,7 @@ export default function Home() {
                             <img
                                 src="https://media.istockphoto.com/id/547010832/vector/india-travel.jpg?s=170667a&w=0&k=20&c=7v_Eia6mhWPBAhRo3a-8q05U7yOv3jr5U7tSXD-LYrs="
                                 alt="Indian Tourism Heritage"
+                                loading="lazy"
                                 className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
                             />
                         </div>

@@ -103,6 +103,7 @@ export default function SavedDestinationsPage() {
                         <img 
                           src={spot.image} 
                           alt={spot.name} 
+                          loading="lazy"
                           className="absolute inset-0 w-full h-full object-cover opacity-85 group-hover:scale-110 transition-transform duration-700" 
                         />
                         <div className="absolute top-3 right-3 bg-white/30 backdrop-blur-md p-1.5 rounded-full">

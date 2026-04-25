@@ -8,8 +8,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff, Mail, Sparkles, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, useAnimation } from "framer-motion";
-import { useGoogleLogin } from '@react-oauth/google';
-import { FcGoogle } from 'react-icons/fc';
 import Link from 'next/link';
 
 
@@ -196,7 +194,6 @@ interface AnimatedLoginPageProps {
   success?: string;
   isLoading?: boolean;
   onSubmit?: (e: React.FormEvent) => void;
-  onGoogleSuccess?: (token: string) => void;
   rememberMe?: boolean;
   setRememberMe?: (remember: boolean) => void;
 }
@@ -210,7 +207,6 @@ export function AnimatedCharactersLoginPage({
   success = "",
   isLoading = false,
   onSubmit = (e) => e.preventDefault(),
-  onGoogleSuccess = (token) => {},
   rememberMe = false,
   setRememberMe = () => {},
 }: AnimatedLoginPageProps) {
@@ -223,20 +219,7 @@ export function AnimatedCharactersLoginPage({
   const [isLookingAtEachOther, setIsLookingAtEachOther] = useState(false);
   const [isPurplePeeking, setIsPurplePeeking] = useState(false);
   const [isSad, setIsSad] = useState(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const controls = useAnimation();
-  
-  const handleGoogleLogin = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      setIsGoogleLoading(true);
-      onGoogleSuccess(tokenResponse.access_token);
-      // parent will handle loading state reset via standard `isLoading` if it fails
-    },
-    onError: (error) => {
-      console.error('Google Login Failed', error);
-      setIsGoogleLoading(false);
-    }
-  });
 
   const purpleRef = useRef<HTMLDivElement>(null);
   const blackRef = useRef<HTMLDivElement>(null);

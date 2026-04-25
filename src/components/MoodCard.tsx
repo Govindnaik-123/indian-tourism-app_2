@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import React, { useState, useRef } from 'react';
@@ -71,6 +71,7 @@ export const MoodCard: React.FC<MoodCardProps> = ({
                         ref={imgRef}
                         src={imageUrl}
                         alt={type}
+                        loading="lazy"
                         className={`w-full h-full object-cover transition-transform duration-700 ${isLoading ? 'opacity-0' : 'opacity-100'} group-hover:scale-110`}
                         style={{
                             objectPosition: type === 'Excited' ? 'center 20%' : 'center'

@@ -177,7 +177,7 @@ export default function PlannerPage() {
                             onClick={() => toggleSpot(spot.id)}
                             className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${selectedSpots.includes(spot.id) ? 'bg-teal-50 border-teal-200' : 'bg-white border-gray-200 hover:border-teal-200'}`}
                           >
-                            <img src={spot.image} alt={spot.name} className="w-12 h-12 rounded-lg object-cover" />
+                            <img src={spot.image} alt={spot.name} loading="lazy" className="w-12 h-12 rounded-lg object-cover" />
                             <div className="flex-1 overflow-hidden">
                               <h4 className="font-bold text-sm text-gray-900 truncate">{spot.name}</h4>
                               <p className="text-xs text-gray-500">{spot.state}</p>
@@ -235,7 +235,7 @@ export default function PlannerPage() {
                                 const spot = TOURISM_SPOTS.find(s => s.id === spotId);
                                 return spot ? (
                                   <div key={spot.id} className="flex items-center gap-3 bg-slate-50 p-2 rounded-lg">
-                                    <img src={spot.image} className="w-8 h-8 rounded-md object-cover" alt="" />
+                                    <img src={spot.image} loading="lazy" className="w-8 h-8 rounded-md object-cover" alt="" />
                                     <span className="text-sm font-bold text-gray-700">{spot.name}</span>
                                   </div>
                                 ) : null;

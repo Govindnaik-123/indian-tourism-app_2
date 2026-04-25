@@ -6,8 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Sparkles } from "lucide-react";
 import { motion, useAnimation } from "framer-motion";
-import { useGoogleLogin } from '@react-oauth/google';
-import { FcGoogle } from 'react-icons/fc';
 
 interface PupilProps {
   size?: number;
@@ -186,7 +184,6 @@ interface AnimatedSignupPageProps {
   success?: string;
   isLoading?: boolean;
   onSubmit: (e: React.FormEvent) => void;
-  onGoogleSuccess?: (token: string) => void;
 }
 
 export function AnimatedCharactersSignupPage({
@@ -196,7 +193,6 @@ export function AnimatedCharactersSignupPage({
   success = "",
   isLoading = false,
   onSubmit,
-  onGoogleSuccess = (token) => {},
 }: AnimatedSignupPageProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -214,19 +210,7 @@ export function AnimatedCharactersSignupPage({
   const [isPurplePeeking, setIsPurplePeeking] = useState(false);
   
   const [isSad, setIsSad] = useState(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const controls = useAnimation();
-  
-  const handleGoogleLogin = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      setIsGoogleLoading(true);
-      onGoogleSuccess(tokenResponse.access_token);
-    },
-    onError: (error) => {
-      console.error('Google Signup Failed', error);
-      setIsGoogleLoading(false);
-    }
-  });
 
   const purpleRef = useRef<HTMLDivElement>(null);
   const blackRef = useRef<HTMLDivElement>(null);
@@ -652,24 +636,6 @@ export function AnimatedCharactersSignupPage({
                 ) : "Sign Up Free"}
             </Button>
           </form>
-
-          {/* Social Login */}
-          <div className="mt-6">
-            <Button 
-              variant="outline" 
-              className="w-full h-12 bg-white border-gray-200 hover:bg-gray-50 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2"
-              type="button"
-              onClick={() => handleGoogleLogin()}
-              disabled={isLoading || isGoogleLoading}
-            >
-              {isGoogleLoading ? (
-                <div className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-              ) : (
-                <FcGoogle className="size-5" />
-              )}
-              {isGoogleLoading ? "Connecting..." : "Sign in with Google"}
-            </Button>
-          </div>
 
           {/* Login Link */}
           <div className="text-center text-sm text-muted-foreground mt-8 p-6 rounded-2xl bg-gray-50/50">

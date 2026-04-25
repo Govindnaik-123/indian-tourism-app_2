@@ -198,6 +198,7 @@ export default function DashboardPage() {
                       <img 
                         src={item.image || item.heroImage} 
                         alt={item.name} 
+                        loading="lazy"
                         className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
                       />
                       <div className="absolute top-5 left-5">
@@ -242,6 +243,7 @@ export default function DashboardPage() {
                         <img 
                           src={item.image || item.heroImage} 
                           alt={item.name} 
+                          loading="lazy"
                           className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 font-sans" 
                         />
                          <div className="absolute top-3 right-3">

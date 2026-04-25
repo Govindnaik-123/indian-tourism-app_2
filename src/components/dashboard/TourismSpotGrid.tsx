@@ -105,6 +105,7 @@ export const TourismSpotGrid: React.FC<TourismSpotGridProps> = ({
                   <img
                     src={spot.image}
                     alt={spot.name}
+                    loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = `https://source.unsplash.com/600x400/?india,${spot.name}`;

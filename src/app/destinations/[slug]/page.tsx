@@ -11,6 +11,8 @@ import { JournalModal } from '@/components/dashboard/JournalModal';
 import { DESTINATIONS } from '@/data/destinations';
 import { STATES } from '@/data/statesData';
 import { Button } from '@/components/Button';
+import { WeatherWidget } from '@/components/tourism/WeatherWidget';
+import { LocationMap } from '@/components/tourism/LocationMap';
 import Link from 'next/link';
 
 export default function DestinationDetailPage() {
@@ -157,6 +159,7 @@ export default function DestinationDetailPage() {
               <img 
                 src={img.url || "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=400&h=400&q=80"} 
                 alt={img.name || "Culture"} 
+                loading="lazy"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-125 group-hover:rotate-1" 
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-center p-6 translate-y-4 group-hover:translate-y-0">
@@ -181,6 +184,7 @@ export default function DestinationDetailPage() {
               <img 
                 src={img.url || "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=400&h=400&q=80"} 
                 alt={img.name || "Culture"} 
+                loading="lazy"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-125 group-hover:rotate-1" 
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-center p-6 translate-y-4 group-hover:translate-y-0">
@@ -256,7 +260,7 @@ export default function DestinationDetailPage() {
                     whileHover={{ y: -4, scale: 1.02 }}
                     className="relative h-48 rounded-2xl overflow-hidden shadow-lg border-2 border-white"
                   >
-                    <img src={src} alt="Culture" className="w-full h-full object-cover" />
+                    <img src={src} alt="Culture" loading="lazy" className="w-full h-full object-cover" />
                   </motion.div>
                 ))}
               </div>
@@ -264,22 +268,29 @@ export default function DestinationDetailPage() {
           </div>
 
 
-        {/* Best Time to Visit */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white rounded-xl p-6 shadow-lg mb-8"
-        >
-          <h2 className="text-2xl font-bold mb-4">Best Time to Visit</h2>
-          <div className="flex flex-wrap gap-2">
-            {destination.bestTimeToVisit.map((month: string) => (
-              <span key={month} className="bg-green-100 text-green-800 px-3 py-1 rounded-full">
-                {month}
-              </span>
-            ))}
-          </div>
-        </motion.div>
+        {/* Weather & Best Time */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          {/* Best Time to Visit */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="bg-white rounded-xl p-6 shadow-lg h-full"
+          >
+            <h2 className="text-2xl font-bold mb-4">Best Time to Visit</h2>
+            <div className="flex flex-wrap gap-2">
+              {destination.bestTimeToVisit.map((month: string) => (
+                <span key={month} className="bg-green-100 text-green-800 px-3 py-1 rounded-full">
+                  {month}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
+          {destination.latitude && destination.longitude && (
+            <WeatherWidget lat={destination.latitude} lon={destination.longitude} locationName={destination.name} />
+          )}
+        </div>
 
 
         {/* Itinerary */}
@@ -308,6 +319,13 @@ export default function DestinationDetailPage() {
             ))}
           </div>
         </motion.div>
+
+        {/* Location Map */}
+        {destination.latitude && destination.longitude && (
+          <div className="mb-12">
+            <LocationMap lat={destination.latitude} lon={destination.longitude} title={destination.name} />
+          </div>
+        )}
 
         {/* Tour Package & Cost */}
         {destination.packageAmount ? (
