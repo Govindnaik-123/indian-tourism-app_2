@@ -80,40 +80,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleGoogleSuccess = async (response: any) => {
-    setError('');
-    setSuccess('');
-    setLoading(true);
-
-    try {
-      const res = await fetch('/api/auth/google', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          credential: response.credential,
-          rememberMe: formData.rememberMe 
-        }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        setUser(data.data?.user || data.user);
-        router.push('/dashboard');
-      } else {
-        setError(data.message || 'Google login failed');
-        console.error('Google login error:', data);
-      }
-    } catch (err) {
-      setError('An error occurred during Google login');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <AnimatedCharactersLoginPage 
       email={formData.email}
@@ -124,7 +90,6 @@ export default function LoginPage() {
       success={success}
       isLoading={isLoading}
       onSubmit={handleSubmit}
-      onGoogleSuccess={handleGoogleSuccess}
       rememberMe={formData.rememberMe}
       setRememberMe={handleRememberMeChange}
     />

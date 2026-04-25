@@ -27,14 +27,34 @@ export const Footer: React.FC = () => {
                             Five years of experience in creating the most memorable journeys across India. We believe in travel that touches the soul.
                         </p>
                         <div className="flex gap-4">
-                            {['𝕏', 'f', '@', '▶'].map((icon, i) => (
+                            {[
+                                {
+                                    icon: '𝕏',
+                                    href: "#",
+                                    onClick: (e: React.MouseEvent) => {
+                                        e.preventDefault();
+                                        window.open("https://www.instagram.com/indian.travellers/", "_blank");
+                                    }
+                                },
+                                { icon: 'f', href: "#" },
+                                {
+                                    icon: '@',
+                                    href: "#",
+                                    onClick: (e: React.MouseEvent) => {
+                                        e.preventDefault();
+                                        window.open("https://www.instagram.com/orey_halwaaa/", "_blank");
+                                    }
+                                },
+                                { icon: '▶', href: "#" }
+                            ].map((social, i) => (
                                 <motion.a
                                     key={i}
                                     whileHover={{ y: -3, color: '#efba6c' }}
-                                    href="#"
-                                    className="w-10 h-10 border border-gray-200 flex items-center justify-center text-sm transition-colors rounded-none"
+                                    href={social.href}
+                                    onClick={social.onClick}
+                                    className="w-10 h-10 border border-gray-200 flex items-center justify-center text-sm transition-colors rounded-none cursor-pointer"
                                 >
-                                    {icon}
+                                    {social.icon}
                                 </motion.a>
                             ))}
                         </div>
@@ -48,8 +68,8 @@ export const Footer: React.FC = () => {
                                 const href = item.toLowerCase() === 'home' ? '/' : `/${item.toLowerCase()}`;
                                 return (
                                     <li key={item}>
-                                        <Link 
-                                            href={href} 
+                                        <Link
+                                            href={href}
                                             onClick={(e) => {
                                                 if (href === '/destinations' && !isAuthenticated) {
                                                     e.preventDefault();
