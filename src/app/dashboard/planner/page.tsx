@@ -1,14 +1,16 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Sidebar } from '@/components/dashboard/Sidebar';
 import { DashboardNavbar } from '@/components/dashboard/DashboardNavbar';
-import { Calendar, Plus, Map, Navigation, Loader2, X, ChevronRight, MapPin } from 'lucide-react';
+import { Calendar, Plus, Map, Navigation, Loader2, X, ChevronRight, MapPin, Trash2 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
-import { TOURISM_SPOTS } from '@/data/tourismData';
+import { STATES } from '@/data/statesData';
 
 export default function PlannerPage() {
+  const router = useRouter();
   const { user, checkAuth } = useAuthStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -25,17 +27,12 @@ export default function PlannerPage() {
   const [selectedSpots, setSelectedSpots] = useState<string[]>([]);
   const [spotSearch, setSpotSearch] = useState('');
   
-  // Available spots for a user to select (filtered by search or default to saved)
-  const filteredSpots = TOURISM_SPOTS.filter(spot => {
+  const filteredSpots = STATES.filter(state => {
     if (spotSearch.trim() !== '') {
       const q = spotSearch.toLowerCase();
-      return spot.name.toLowerCase().includes(q) || spot.state.toLowerCase().includes(q);
+      return state.name.toLowerCase().includes(q) || state.description.toLowerCase().includes(q);
     }
-    // If no search, show saved spots or a mix if none saved
-    if (user?.favoriteDestinations && user.favoriteDestinations.length > 0) {
-      return user.favoriteDestinations.includes(spot.id) || selectedSpots.includes(spot.id);
-    }
-    return selectedSpots.includes(spot.id) || TOURISM_SPOTS.indexOf(spot) < 15;
+    return true; // Return all spots if no search is provided
   });
 
   useEffect(() => {
@@ -85,6 +82,32 @@ export default function PlannerPage() {
       console.error('Failed to create trip', error);
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const removeTrip = async (e: React.MouseEvent, indexToRemove: number) => {
+    e.stopPropagation();
+    if (!confirm('Are you sure you want to remove this trip?')) return;
+    
+    try {
+      const updatedTrips = trips.filter((_, idx) => idx !== indexToRemove);
+      setTrips(updatedTrips); // Optimistic update
+      
+      const res = await fetch('/api/user', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plannedTrips: updatedTrips })
+      });
+
+      if (res.ok) {
+        await checkAuth();
+      } else {
+        // Revert if failed
+        setTrips(trips);
+      }
+    } catch (error) {
+      console.error('Failed to remove trip', error);
+      setTrips(trips);
     }
   };
 
@@ -171,19 +194,19 @@ export default function PlannerPage() {
                         {filteredSpots.length === 0 && spotSearch !== '' && (
                           <div className="text-sm text-gray-500 text-center mt-4">No places found matching "{spotSearch}"</div>
                         )}
-                        {filteredSpots.map(spot => (
+                        {filteredSpots.map(state => (
                           <div 
-                            key={spot.id} 
-                            onClick={() => toggleSpot(spot.id)}
-                            className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${selectedSpots.includes(spot.id) ? 'bg-teal-50 border-teal-200' : 'bg-white border-gray-200 hover:border-teal-200'}`}
+                            key={state.slug} 
+                            onClick={() => toggleSpot(state.slug)}
+                            className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${selectedSpots.includes(state.slug) ? 'bg-teal-50 border-teal-200' : 'bg-white border-gray-200 hover:border-teal-200'}`}
                           >
-                            <img src={spot.image} alt={spot.name} loading="lazy" className="w-12 h-12 rounded-lg object-cover" />
+                            <img src={state.image} alt={state.name} loading="lazy" className="w-12 h-12 rounded-lg object-cover" />
                             <div className="flex-1 overflow-hidden">
-                              <h4 className="font-bold text-sm text-gray-900 truncate">{spot.name}</h4>
-                              <p className="text-xs text-gray-500">{spot.state}</p>
+                              <h4 className="font-bold text-sm text-gray-900 truncate">{state.name}</h4>
+                              <p className="text-xs text-gray-500">State in India</p>
                             </div>
-                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${selectedSpots.includes(spot.id) ? 'bg-teal-500 border-teal-500' : 'border-gray-300'}`}>
-                              {selectedSpots.includes(spot.id) && <div className="w-2 h-2 bg-white rounded-full"/>}
+                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${selectedSpots.includes(state.slug) ? 'bg-teal-500 border-teal-500' : 'border-gray-300'}`}>
+                              {selectedSpots.includes(state.slug) && <div className="w-2 h-2 bg-white rounded-full"/>}
                             </div>
                           </div>
                         ))}
@@ -215,10 +238,25 @@ export default function PlannerPage() {
                   {trips.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                       {trips.map((trip, idx) => (
-                        <div key={idx} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
+                        <div 
+                          key={idx} 
+                          onClick={() => {
+                            if (trip.destinations && trip.destinations.length > 0) {
+                              router.push(`/destinations/${trip.destinations[0]}`);
+                            }
+                          }}
+                          className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow group cursor-pointer"
+                        >
                           <div className="bg-gradient-to-br from-teal-500 to-blue-500 h-32 relative">
+                            <button 
+                              onClick={(e) => removeTrip(e, idx)}
+                              className="absolute top-4 right-4 z-20 p-2 bg-black/20 hover:bg-red-500 text-white rounded-full transition-colors backdrop-blur-sm"
+                              title="Remove Trip"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
                             <div className="absolute inset-0 bg-black/10"></div>
-                            <div className="absolute bottom-4 left-4 right-4 text-white">
+                            <div className="absolute bottom-4 left-4 right-4 text-white z-10">
                               <h3 className="text-xl font-black line-clamp-1">{trip.title}</h3>
                               <p className="text-sm font-medium opacity-90 flex items-center gap-1 mt-1">
                                 <Calendar className="w-4 h-4" /> 
@@ -231,12 +269,12 @@ export default function PlannerPage() {
                               <MapPin className="w-4 h-4"/> Exploring {trip.destinations?.length || 0} Places
                             </h4>
                             <div className="space-y-3 mb-6">
-                              {trip.destinations?.slice(0, 3).map((spotId: string) => {
-                                const spot = TOURISM_SPOTS.find(s => s.id === spotId);
-                                return spot ? (
-                                  <div key={spot.id} className="flex items-center gap-3 bg-slate-50 p-2 rounded-lg">
-                                    <img src={spot.image} loading="lazy" className="w-8 h-8 rounded-md object-cover" alt="" />
-                                    <span className="text-sm font-bold text-gray-700">{spot.name}</span>
+                              {trip.destinations?.slice(0, 3).map((slug: string) => {
+                                const state = STATES.find(s => s.slug === slug);
+                                return state ? (
+                                  <div key={state.slug} className="flex items-center gap-3 bg-slate-50 p-2 rounded-lg">
+                                    <img src={state.image} loading="lazy" className="w-8 h-8 rounded-md object-cover" alt="" />
+                                    <span className="text-sm font-bold text-gray-700">{state.name}</span>
                                   </div>
                                 ) : null;
                               })}

@@ -39,6 +39,7 @@ export async function GET(request: NextRequest) {
           preferredLandscape: userData.preferredLandscape,
           darkMode: userData.darkMode,
           favoriteDestinations: userData.favoriteDestinations,
+          plannedTrips: userData.plannedTrips,
         },
       }
     }, { status: 200 });
