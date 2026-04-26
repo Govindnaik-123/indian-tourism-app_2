@@ -78,36 +78,6 @@ export default function SignupPage() {
       setLoading(false);
     }
   };
-  const handleGoogleSuccess = async (token: string) => {
-    setError('');
-    setSuccess('');
-    setLoading(true);
-
-    try {
-      const response = await fetch('/api/auth/google', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ credential: token }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        useAuthStore.getState().setUser(data.user);
-        setSuccess('Successfully signed up with Google!');
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 1500);
-      } else {
-        setError(data.message || 'Google Signup failed. Please try again.');
-      }
-    } catch (err) {
-      setError('A connection error occurred. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <>
       <Navbar />
@@ -118,7 +88,6 @@ export default function SignupPage() {
         success={success}
         isLoading={isLoading}
         onSubmit={handleSubmit}
-        onGoogleSuccess={handleGoogleSuccess}
       />
     </>
   );
