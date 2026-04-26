@@ -213,7 +213,7 @@ Festivals like Carnival and Christmas are celebrated with energy. Seafood and lo
       { url: "https://tse1.mm.bing.net/th/id/OIP.fZ0bJcZA1aWproQRCSCjsQHaE8?rs=1&pid=ImgDetMain&o=7&rm=3", name: "Old Goa Church" },
       { url: "https://media-cdn.tripadvisor.com/media/photo-s/1c/bc/b1/3a/15-candolim-8-largejpg.jpg", name: "Goa Scenic Beach" }
     ],
-    moods: ["Happy","Romantic"],
+    moods: ["Happy", "Romantic"],
     packageAmount: "₹25,000 - ₹45,000"
   },
   {
@@ -288,7 +288,7 @@ Festivals like Kullu Dussehra bring communities together. The food is simple and
       { url: "https://media.istockphoto.com/id/471545029/photo/devotees-at-buddhist-monastery-tawang-arunachal-pradesh-india.jpg?s=612x612&w=0&k=20&c=VymgITArvm8CG6ESfv6xyydg2pdn5LORgK4FQFUDngI=", name: "Tibetan Monks" },
       { url: "https://uttarakhandtravelagency.com/images/shimla_1753022198.jpg", name: "Shimla Landscape" }
     ],
-    moods: ["Sad","Adventurous","Stressed"],
+    moods: ["Sad", "Adventurous", "Stressed"],
     packageAmount: "₹20,000 - ₹40,000"
   },
   {
@@ -388,7 +388,7 @@ Onam is the biggest festival celebrated with feasts and traditions. The food is 
       { url: "https://kerala.me/wp-content/uploads/2015/12/Coconut-Tress.jpg", name: "Backwater Palms" },
       { url: "https://media.newindianexpress.com/TNIE%2Fimport%2F2015%2F9%2F18%2F23%2Foriginal%2Fkerala.jpg?auto=format%2Ccompress&fit=max&w=480", name: "Kerala Banana Leaf Rice" }
     ],
-    moods: ["Sad","Calm","Stressed"],
+    moods: ["Sad", "Calm", "Stressed"],
     packageAmount: "₹25,000 - ₹45,000"
   },
   {
@@ -488,7 +488,7 @@ Festivals like Wangala bring communities together with music and dance. The food
       { url: "https://www.oddessemania.in/wp-content/uploads/2024/04/Wangala-dances-of-meghalaya-1024x682.jpg", name: "Wangala Dance" },
       { url: "https://ak0.picdn.net/shutterstock/videos/9863990/thumb/1.jpg?i10c=img.resize(height:160)", name: "Khasi Lifestyle" }
     ],
-    moods: ["Lonely","Adventurous"],
+    moods: ["Lonely", "Adventurous"],
     packageAmount: "₹18,000 - ₹35,000"
   },
   {
@@ -638,7 +638,7 @@ Festivals like Losar reflect Buddhist traditions. The food includes Momos, Thukp
       { url: "https://www.esikkimtourism.in/wp-content/uploads/2019/04/topmarch.jpg", name: "Frozen Lake" },
       { url: "https://www.bhutanrentalandtravel.com/images/thumb/bhutan-culture.jpg", name: "Bhutan Cultural Link" }
     ],
-    moods: ["Sad","Calm"],
+    moods: ["Sad", "Calm"],
     packageAmount: "₹20,000 - ₹40,000"
   },
   {
@@ -663,7 +663,7 @@ Pongal is the main festival celebrating harvest and gratitude. The cuisine inclu
       { url: "https://webneel.com/wnet/file/images/3-17/3-dosa-idlis-india-food-photography-by-nitin-rai.preview.jpg", name: "South Indian Food" },
       { url: "https://d26dp53kz39178.cloudfront.net/media/uploads/products/image12_result-2-1675320531314.webp", name: "Mahabalipuram" }
     ],
-    moods: ["Spiritual","Stressed"],
+    moods: ["Spiritual", "Stressed"],
     packageAmount: "₹15,000 - ₹30,000"
   },
   {
@@ -763,7 +763,7 @@ Festivals and pilgrimages like Char Dham Yatra are important. The food is simple
       { url: "https://campgangavatika.com/imgart/bungee-jump-rishikesh.jpg", name: "Bungee Jumping" },
       { url: "https://travelfoodatlas.com/wp-content/uploads/2023/11/Moloykhia.jpg.webp", name: "Local Food" }
     ],
-    moods: ["Lonely","Spiritual","Adventurous"],
+    moods: ["Lonely", "Spiritual", "Adventurous"],
     packageAmount: "₹15,000 - ₹30,000"
   },
   {
