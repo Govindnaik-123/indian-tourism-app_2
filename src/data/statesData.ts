@@ -419,7 +419,7 @@ Festivals and traditions vary across regions. The food is simple yet flavorful. 
   {
     name: "Maharashtra",
     slug: "maharashtra",
-    image: "https://images.unsplash.com/photo-1567157577867-05ccb1340003?auto=format&fit=crop&w=800&q=80",
+    image: "/images/vadapav.png",
     description: "Bollywood, Ajanta-Ellora caves, and vibrant Mumbai.",
     highlights: ["Mumbai", "Ajanta & Ellora", "Lonavala"],
     emoji: "🎬",
