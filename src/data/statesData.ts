@@ -335,7 +335,7 @@ Festivals like Sarhul celebrate nature. The food is simple and organic. The stat
     culturalImages: [
       { url: "https://img1.picmix.com/output/stamp/normal/9/0/8/8/268809_840ec.gif", name: "Tribal Folk Art" },
       { url: "https://i0.wp.com/wordzz.com/wp-content/uploads/2023/04/Betla-National-Park-Elephant.jpeg?resize=1536%2C975&ssl=1", name: "Wild Elephant" },
-      { url: "https://c.ndtvimg.com/2023-05/d21dajqo_dhuska_625x300_10_May_23.jpg?im=FaceCrop,algorithm=dnn,width=1200,height=675", name: "Local Cuisine (Dhuska)" },
+      { url: "/images/dhuska.png", name: "Local Cuisine (Dhuska)" },
       { url: "https://www.namasteindiatrip.org/wp-content/uploads/2022/12/Karam-Dance.jpg", name: "Karam Dance" }
     ],
     moods: ["Sad"],
@@ -560,7 +560,7 @@ Festivals like Rath Yatra attract millions of devotees. The food includes rice-b
     culturalImages: [
       { url: "https://imvoyager.com/wp-content/uploads/2017/10/Jagannath-Temple-Puri.jpg", name: "Jagannath Temple" },
       { url: "https://purimarkets.com/images/slide40.JPG", name: "Temple Gateways" },
-      { url: "https://hindufestivaldates.com/wp-content/uploads/2024/07/rath-yatra-wishes-in-odia-1024x684.jpeg", name: "Rath Yatra" },
+      { url: "/images/rath_yatra.png", name: "Rath Yatra" },
       { url: "https://shreejagannathapuri.com/wp-content/uploads/2025/05/ChatGPT-Image-May-27-2025-07_23_00-PM-1.png", name: "Coastal Temple" }
     ],
     moods: [],
