@@ -261,7 +261,7 @@ Festivals like Teej and harvest celebrations are important. The food is hearty, 
       { url: "https://magarticles.magzter.com/articles/245/254738/5a25105737c7c/Kurukshetra.jpg", name: "Kurukshetra Site" },
       { url: "https://media.istockphoto.com/id/1223368332/photo/yadavindra-gardens-also-known-as-pinjore-gardens.jpg?s=170667a&w=0&k=20&c=cc9_DQzLNBlDrBrCmerzfao2k9yULE_s3Y01IFBlDqM=", name: "Pinjore Garden" },
       { url: "https://www.holidify.com/images/cmsuploads/articles/239.jpg", name: "Surajkund Fair" },
-      { url: "https://www.japjitravel.com/blog/wp-content/uploads/2024/04/Besan-Masala-Roti-Haryana.webp", name: "Local Haryanvi Cuisine" }
+      { url: "https://www.japjitravel.com/blog/wp-content/uploads/2024/04/Besan-Masala-Roti-Haryana.webp", name: "BesanMasala Roti" }
     ],
     moods: ["Spiritual"],
     packageAmount: "₹10,000 - ₹18,000"
@@ -308,7 +308,7 @@ Festivals like Kullu Dussehra bring communities together. The food is simple and
 
 Festivals and cultural traditions reflect both Islamic and local influences. The cuisine includes Wazwan dishes and Kahwa. It’s a place of beauty and peace.`,
     culturalImages: [
-      { url: "https://www.grasshopperyatra.com/assets/images/main/1711627155789.jpg", name: "Dal Lake Shikara" },
+      { url: "https://www.grasshopperyatra.com/assets/images/main/1711627155789.jpg", name: "Tulip Fields Valley" },
       { url: "https://images.news18.com/ibnlive/uploads/2018/09/Floating-Vegetable-Market-in-Dal-Lake-5.jpg", name: "Floating Market" },
       { url: "https://shikaraboatalleppey.com/wp-content/uploads/2024/07/p3.jpg", name: "Kashmiri Boat House" },
       { url: "https://media.cnn.com/api/v1/images/stellar/prod/240112092102-01-gulmarg-snow.jpg?q=w_1110,c_fill", name: "Gulmarg Snow" }
@@ -333,7 +333,7 @@ Festivals and cultural traditions reflect both Islamic and local influences. The
 
 Festivals like Sarhul celebrate nature. The food is simple and organic. The state offers raw natural beauty and cultural richness.`,
     culturalImages: [
-      { url: "https://img1.picmix.com/output/stamp/normal/9/0/8/8/268809_840ec.gif", name: "Tribal Folk Art" },
+      { url: "https://img1.picmix.com/output/stamp/normal/9/0/8/8/268809_840ec.gif", name: "Fantasy Waterfall" },
       { url: "https://i0.wp.com/wordzz.com/wp-content/uploads/2023/04/Betla-National-Park-Elephant.jpeg?resize=1536%2C975&ssl=1", name: "Wild Elephant" },
       { url: "/images/dhuska.png", name: "Local Cuisine (Dhuska)" },
       { url: "https://www.namasteindiatrip.org/wp-content/uploads/2022/12/Karam-Dance.jpg", name: "Karam Dance" }
@@ -384,9 +384,9 @@ Festivals like Dasara are grandly celebrated. The food includes dosa, idli, and 
 Onam is the biggest festival celebrated with feasts and traditions. The food is rich and served on banana leaves. Kerala offers peace and cultural beauty.`,
     culturalImages: [
       { url: "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/7ff421166298261.6415d2fa6ad4e.jpg", name: "Kathakali Performance" },
-      { url: "https://cdn.dribbble.com/userupload/16588398/file/original-5643e1db56e96791a6762c31cf1272f0.png?format=webp&resize=800x600&vertical=center", name: "Ayurveda Center" },
+      { url: "https://cdn.dribbble.com/userupload/16588398/file/original-5643e1db56e96791a6762c31cf1272f0.png?format=webp&resize=800x600&vertical=center", name: "Onam" },
       { url: "https://kerala.me/wp-content/uploads/2015/12/Coconut-Tress.jpg", name: "Backwater Palms" },
-      { url: "https://media.newindianexpress.com/TNIE%2Fimport%2F2015%2F9%2F18%2F23%2Foriginal%2Fkerala.jpg?auto=format%2Ccompress&fit=max&w=480", name: "Snake Boat Race" }
+      { url: "https://media.newindianexpress.com/TNIE%2Fimport%2F2015%2F9%2F18%2F23%2Foriginal%2Fkerala.jpg?auto=format%2Ccompress&fit=max&w=480", name: "Kerala Banana Leaf Rice" }
     ],
     moods: ["Sad","Calm","Stressed"],
     packageAmount: "₹25,000 - ₹45,000"
@@ -434,7 +434,7 @@ Festivals and traditions vary across regions. The food is simple yet flavorful. 
 Ganesh Chaturthi is celebrated with great enthusiasm. The food ranges from street snacks to traditional meals. It’s lively and diverse.`,
     culturalImages: [
       { url: "https://spn-sta.spinny.com/blog/20231027223721/Lonavala-1160x653.webp", name: "Matheran Toy Train" },
-      { url: "https://www.delhitourism.com/images/destination/5e5f4de2ac157banner-maharashtra.jpg", name: "Maharashtra Tourism" },
+      { url: "https://www.delhitourism.com/images/destination/5e5f4de2ac157banner-maharashtra.jpg", name: "Gateway of India" },
       { url: "https://static.toiimg.com/photo/msid-103770399,width-96,height-65.cms", name: "Ganesh Chaturthi" },
       { url: "https://res.cloudinary.com/kmadmin/image/upload/v1743244200/kiomoi/marine-drive-2_3907.webp", name: "Marine Drive Night" }
     ],
@@ -510,7 +510,7 @@ Festivals like Chapchar Kut are celebrated with traditional bamboo dances. The f
     culturalImages: [
       { url: "https://s7ap1.scene7.com/is/image/incredibleindia/solomons-temple-aizawl-mizoram-1-attr-hero?qlt=82&ts=1726665869426", name: "Solomon's Temple" },
       { url: "https://theultimateindia.com/wp-content/uploads/2023/04/best-places-to-see-in-mizoram-2.jpg", name: "Aizawl Peaks" },
-      { url: "https://tse3.mm.bing.net/th/id/OIP.2t0Qw7rKHE4NeWTvjif3fAHaFU?rs=1&pid=ImgDetMain&o=7&rm=3", name: "Bamboo Forest" },
+      { url: "https://tse3.mm.bing.net/th/id/OIP.2t0Qw7rKHE4NeWTvjif3fAHaFU?rs=1&pid=ImgDetMain&o=7&rm=3", name: "Bamboo Food" },
       { url: "https://editorial01.shutterstock.com/preview-440/7955599h/c327f285/Shutterstock_7955599h.jpg", name: "Traditional Mizo Village" }
     ],
     moods: ["Adventurous"],
@@ -535,8 +535,8 @@ The Hornbill Festival is the biggest celebration, showcasing dance, music, and t
     culturalImages: [
       { url: "https://www.exploreouting.com/images/m_images/KOHI_1505376650_1.jpg", name: "Naga Warrior Village" },
       { url: "https://static2.tripoto.com/media/filter/nl/img/371044/TripDocument/1505033855_mg_3439.jpg", name: "Hornbill Performance" },
-      { url: "https://www.solitarytraveller.com/wp-content/uploads/2020/02/web_hornbill_celeberation-min-1536x1152.jpg", name: "Hornbill Festival" },
-      { url: "https://th.bing.com/th/id/R.4f37851c7f76df26920d23be17c703fb?rik=gXOczmRCo4NoBA&riu=http%3a%2f%2fwww.lostwithpurpose.com%2fwp-content%2fuploads%2f2017%2f06%2fDSC06845.jpg&ehk=UIHGnSA%2f6xVqeuqtlkKioAf1AXTWBvOjDvDpihD7hGk%3d&risl=&pid=ImgRaw&r=0", name: "Konyak Tribe" }
+      { url: "https://www.solitarytraveller.com/wp-content/uploads/2020/02/web_hornbill_celeberation-min-1536x1152.jpg", name: "Konyak Tribe" },
+      { url: "https://th.bing.com/th/id/R.4f37851c7f76df26920d23be17c703fb?rik=gXOczmRCo4NoBA&riu=http%3a%2f%2fwww.lostwithpurpose.com%2fwp-content%2fuploads%2f2017%2f06%2fDSC06845.jpg&ehk=UIHGnSA%2f6xVqeuqtlkKioAf1AXTWBvOjDvDpihD7hGk%3d&risl=&pid=ImgRaw&r=0", name: "Dzüko Valley" }
     ],
     moods: ["Adventurous"],
     packageAmount: "₹20,000 - ₹40,000"
@@ -559,9 +559,9 @@ The Hornbill Festival is the biggest celebration, showcasing dance, music, and t
 Festivals like Rath Yatra attract millions of devotees. The food includes rice-based meals, seafood, and sweets like Rasgulla. Odisha is a blend of devotion, art, and heritage.`,
     culturalImages: [
       { url: "https://imvoyager.com/wp-content/uploads/2017/10/Jagannath-Temple-Puri.jpg", name: "Jagannath Temple" },
-      { url: "https://purimarkets.com/images/slide40.JPG", name: "Temple Gateways" },
+      { url: "https://purimarkets.com/images/slide40.JPG", name: "Chilika Lake" },
       { url: "/images/rath_yatra.png", name: "Rath Yatra" },
-      { url: "https://shreejagannathapuri.com/wp-content/uploads/2025/05/ChatGPT-Image-May-27-2025-07_23_00-PM-1.png", name: "Coastal Temple" }
+      { url: "https://shreejagannathapuri.com/wp-content/uploads/2025/05/ChatGPT-Image-May-27-2025-07_23_00-PM-1.png", name: "shreejagannathapuri Temple" }
     ],
     moods: [],
     packageAmount: "₹12,000 - ₹22,000"
@@ -583,8 +583,8 @@ Festivals like Rath Yatra attract millions of devotees. The food includes rice-b
 
 Festivals like Baisakhi and Lohri are celebrated with dance and music. The food is rich and flavorful, including Butter Chicken and Lassi. Punjab offers joy, hospitality, and vibrant culture.`,
     culturalImages: [
-      { url: "https://aniportalimages.s3.amazonaws.com/media/details/ANI-20230419114915.jpeg", name: "Golden Temple Gate" },
-      { url: "https://images.alphacoders.com/541/thumb-1920-541010.jpg", name: "Amritsar Market" },
+      { url: "https://aniportalimages.s3.amazonaws.com/media/details/ANI-20230419114915.jpeg", name: "Bhangra Dance" },
+      { url: "https://images.alphacoders.com/541/thumb-1920-541010.jpg", name: "Golden Temple " },
       { url: "https://cdn1.goibibo.com/voy_ing/t_fs/amritsar-jallianwala-bagh-148316572461o.jpeg", name: "Jallianwala Bagh" },
       { url: "https://st1.latestly.com/wp-content/uploads/2022/08/97-784x441.jpg", name: "Wagah Border" }
     ],
@@ -608,10 +608,10 @@ Festivals like Baisakhi and Lohri are celebrated with dance and music. The food 
 
 Festivals like Teej and Pushkar Fair bring vibrancy and celebration. The cuisine includes Dal Baati Churma and spicy curries. Rajasthan offers a majestic cultural experience`,
     culturalImages: [
-      { url: "https://media-cdn.tripadvisor.com/media/attractions-splice-spp-674x446/11/d7/cf/f4.jpg", name: "Udaipur City Palace" },
-      { url: "https://www.oyorooms.com/travel-guide/wp-content/uploads/2019/02/city-palace.jpg", name: "Jaipur Fortress" },
-      { url: "https://www.shutterstock.com/preview-440/14160842d/5ec5acfb/Shutterstock_14160842d.jpg", name: "Camel Safari" },
-      { url: "https://cdn.cdnparenting.com/articles/2020/04/07213905/780441559.jpg", name: "Desert Folklore" }
+      { url: "https://media-cdn.tripadvisor.com/media/attractions-splice-spp-674x446/11/d7/cf/f4.jpg", name: "Camel Safari" },
+      { url: "https://www.oyorooms.com/travel-guide/wp-content/uploads/2019/02/city-palace.jpg", name: "City Palace" },
+      { url: "https://www.shutterstock.com/preview-440/14160842d/5ec5acfb/Shutterstock_14160842d.jpg", name: "Ghoomar Dance" },
+      { url: "https://cdn.cdnparenting.com/articles/2020/04/07213905/780441559.jpg", name: "Daal Bati" }
     ],
     moods: ["Romantic"],
     packageAmount: "₹20,000 - ₹40,000"
@@ -761,7 +761,7 @@ Festivals and pilgrimages like Char Dham Yatra are important. The food is simple
       { url: "https://uttarakhand.in/images/river-rafting.jpg", name: "Rishikesh Rafting" },
       { url: "https://media.istockphoto.com/id/1128927445/photo/village-of-wodden-house-in-himalayas-himachal-pradesh.jpg?s=612x612&w=0&k=20&c=JE6jfr7yRu9La-x6isfTzMmbZN0-2RDTsqN7j5wm6uU=", name: "Hill Village" },
       { url: "https://campgangavatika.com/imgart/bungee-jump-rishikesh.jpg", name: "Bungee Jumping" },
-      { url: "https://travelfoodatlas.com/wp-content/uploads/2023/11/Moloykhia.jpg.webp", name: "Local Garhwali Food" }
+      { url: "https://travelfoodatlas.com/wp-content/uploads/2023/11/Moloykhia.jpg.webp", name: "Local Food" }
     ],
     moods: ["Lonely","Spiritual","Adventurous"],
     packageAmount: "₹15,000 - ₹30,000"
