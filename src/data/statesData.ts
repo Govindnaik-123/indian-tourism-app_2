@@ -109,7 +109,7 @@ Festivals like Losar and tribal celebrations bring color and unity. The food is 
 Bihu is the most important festival, celebrated with dance and music. Assamese cuisine includes rice-based dishes, fish, and unique flavors. The state offers a refreshing blend of culture, greenery, and simplicity.`,
     culturalImages: [
       { url: "https://media.savetherhino.org/prod/uploads/2018/05/GuestBlogGreaterOneHornedRhinoJessicaFrei.jpg", name: "One-Horned Rhino" },
-      { url: "https://www.adotrip.com/public/images/state/contentImg/5f183523103dd.jpg", name: "Brahmaputra River" },
+      { url: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=800&q=80", name: "Brahmaputra River" },
       { url: "https://files.prokerala.com/news/photos/imgs/1200/a-woman-performs-bihu-dance-ahead-of-the-rongali-527309.jpg", name: "Bihu Dance" },
       { url: "https://img.freepik.com/premium-photo/tea-plantations-are-must-see-first-time_1130573-45753.jpg", name: "Assam Tea Gardens" }
     ],
