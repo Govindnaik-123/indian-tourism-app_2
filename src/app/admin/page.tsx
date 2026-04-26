@@ -9,6 +9,15 @@ export default function AdminDashboard() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [currentTime, setCurrentTime] = useState<Date | null>(null);
+
+  useEffect(() => {
+    setCurrentTime(new Date());
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,6 +91,22 @@ export default function AdminDashboard() {
           <div>
             <h1 className="text-3xl font-bold text-white">Registered Users</h1>
             <p className="text-gray-400 mt-1">Live data from MongoDB</p>
+            {currentTime && (
+              <p className="text-orange-300 text-sm mt-2 font-mono flex items-center gap-2">
+                <span>🕒</span>
+                {currentTime.toLocaleString('en-IN', {
+                  timeZone: 'Asia/Kolkata',
+                  weekday: 'short',
+                  day: 'numeric',
+                  month: 'short',
+                  year: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit',
+                  hour12: true
+                })} IST
+              </p>
+            )}
           </div>
           <div className="mt-4 md:mt-0 bg-orange-500/20 px-6 py-3 rounded-xl border border-orange-500/30">
             <p className="text-sm text-orange-200">Total Users</p>
@@ -108,10 +133,13 @@ export default function AdminDashboard() {
                     <td className="px-6 py-4 font-medium text-white">{user.name}</td>
                     <td className="px-6 py-4 text-orange-200">{user.email}</td>
                     <td className="px-6 py-4 text-sm">
-                      {new Date(user.createdAt).toLocaleDateString('en-IN', {
+                      {new Date(user.createdAt).toLocaleString('en-IN', {
                         year: 'numeric',
                         month: 'short',
                         day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true
                       })}
                     </td>
                   </tr>

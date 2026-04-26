@@ -17,7 +17,7 @@ export async function GET(request: Request) {
 
     // 3. Fetch users securely (only non-sensitive fields)
     const users = await User.find({})
-      .select('name email createdAt')
+      .select('name email createdAt lastLogin')
       .sort({ createdAt: -1 })
       .lean();
 

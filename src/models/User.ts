@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    lastLogin: {
+      type: Date,
+      default: null,
+    },
     preferredMood: {
       type: String,
       enum: ['Happy', 'Sad', 'Lonely', 'Romantic', 'Adventurous', 'Stressed', 'Calm', 'Excited', 'Spiritual'],

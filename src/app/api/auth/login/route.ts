@@ -55,7 +55,14 @@ export async function POST(request: NextRequest) {
       }, { status: 401 });
     }
 
-    // 4. Generate JWT token
+    // 4. Update login history
+    if (!user.loginHistory) {
+      user.loginHistory = [];
+    }
+    user.loginHistory.push(new Date());
+    await user.save();
+
+    // 5. Generate JWT token
     const tokenExpiry = rememberMe ? '30d' : '7d'; // 30 days if remember me, 7 days otherwise
     const token = await signToken({
       userId: user._id.toString(),
