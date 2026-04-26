@@ -224,15 +224,15 @@ Please review the following list of all images and their associated names (the t
 | **Jagannath Temple** | ![Jagannath Temple](https://imvoyager.com/wp-content/uploads/2017/10/Jagannath-Temple-Puri.jpg) |
 | **Temple Gateways** | ![Chilika Lake](https://purimarkets.com/images/slide40.JPG) |
 | **Rath Yatra** | Local File: `/images/rath_yatra.png` |
-| **Coastal Temple** | ![shreejagannathapuri Temple](https://shreejagannathapuri.com/wp-content/uploads/2025/05/ChatGPT-Image-May-27-2025-07_23_00-PM-1.png) |
+| **shreejagannathapuri Temple** | ![shreejagannathapuri Temple](https://shreejagannathapuri.com/wp-content/uploads/2025/05/ChatGPT-Image-May-27-2025-07_23_00-PM-1.png) |
 
 ---
 
 ### Punjab
 | Image Name (Hover Text) | Image Preview |
 |---|---|
-| **Golden Temple Gate** | ![Golden Temple Gate](https://aniportalimages.s3.amazonaws.com/media/details/ANI-20230419114915.jpeg) |
-| **Amritsar Market** | ![Amritsar Market](https://images.alphacoders.com/541/thumb-1920-541010.jpg) |
+| **Bhangra Dance** | ![Bhangra Dance](https://aniportalimages.s3.amazonaws.com/media/details/ANI-20230419114915.jpeg) |
+| **Golden Temple** | ![Golden Temple ](https://images.alphacoders.com/541/thumb-1920-541010.jpg) |
 | **Jallianwala Bagh** | ![Jallianwala Bagh](https://cdn1.goibibo.com/voy_ing/t_fs/amritsar-jallianwala-bagh-148316572461o.jpeg) |
 | **Wagah Border** | ![Wagah Border](https://st1.latestly.com/wp-content/uploads/2022/08/97-784x441.jpg) |
 
@@ -241,10 +241,10 @@ Please review the following list of all images and their associated names (the t
 ### Rajasthan
 | Image Name (Hover Text) | Image Preview |
 |---|---|
-| **Udaipur City Palace** | ![Udaipur City Palace](https://media-cdn.tripadvisor.com/media/attractions-splice-spp-674x446/11/d7/cf/f4.jpg) |
-| **Jaipur Fortress** | ![Jaipur Fortress](https://www.oyorooms.com/travel-guide/wp-content/uploads/2019/02/city-palace.jpg) |
-| **Camel Safari** | ![Camel Safari](https://www.shutterstock.com/preview-440/14160842d/5ec5acfb/Shutterstock_14160842d.jpg) |
-| **Desert Folklore** | ![Desert Folklore](https://cdn.cdnparenting.com/articles/2020/04/07213905/780441559.jpg) |
+| **Camel Safari** | ![Camel Safari](https://media-cdn.tripadvisor.com/media/attractions-splice-spp-674x446/11/d7/cf/f4.jpg) |
+| **City Palace** | ![City Palace](https://www.oyorooms.com/travel-guide/wp-content/uploads/2019/02/city-palace.jpg) |
+| **Ghoomar Dance** | ![Ghoomar Dance](https://www.shutterstock.com/preview-440/14160842d/5ec5acfb/Shutterstock_14160842d.jpg) |
+| **Dal Baati** | ![Dal Baati](https://cdn.cdnparenting.com/articles/2020/04/07213905/780441559.jpg) |
 
 ---
 
@@ -304,9 +304,9 @@ Please review the following list of all images and their associated names (the t
 | **Rishikesh Rafting** | ![Rishikesh Rafting](https://uttarakhand.in/images/river-rafting.jpg) |
 | **Hill Village** | ![Hill Village](https://media.istockphoto.com/id/1128927445/photo/village-of-wodden-house-in-himalayas-himachal-pradesh.jpg?s=612x612&w=0&k=20&c=JE6jfr7yRu9La-x6isfTzMmbZN0-2RDTsqN7j5wm6uU=) |
 | **Bungee Jumping** | ![Bungee Jumping](https://campgangavatika.com/imgart/bungee-jump-rishikesh.jpg) |
-| **Local Garhwali Food** | ![Local Garhwali Food](https://travelfoodatlas.com/wp-content/uploads/2023/11/Moloykhia.jpg.webp) |
+| **Local Garhwali Food** | ![Local Food](https://travelfoodatlas.com/wp-content/uploads/2023/11/Moloykhia.jpg.webp) |
 
----
+--- 
 
 ### West Bengal
 | Image Name (Hover Text) | Image Preview |

@@ -584,7 +584,7 @@ Festivals like Rath Yatra attract millions of devotees. The food includes rice-b
 Festivals like Baisakhi and Lohri are celebrated with dance and music. The food is rich and flavorful, including Butter Chicken and Lassi. Punjab offers joy, hospitality, and vibrant culture.`,
     culturalImages: [
       { url: "https://aniportalimages.s3.amazonaws.com/media/details/ANI-20230419114915.jpeg", name: "Bhangra Dance" },
-      { url: "https://images.alphacoders.com/541/thumb-1920-541010.jpg", name: "Golden Temple " },
+      { url: "https://images.alphacoders.com/541/thumb-1920-541010.jpg", name: "Golden Temple" },
       { url: "https://cdn1.goibibo.com/voy_ing/t_fs/amritsar-jallianwala-bagh-148316572461o.jpeg", name: "Jallianwala Bagh" },
       { url: "https://st1.latestly.com/wp-content/uploads/2022/08/97-784x441.jpg", name: "Wagah Border" }
     ],
@@ -611,7 +611,7 @@ Festivals like Teej and Pushkar Fair bring vibrancy and celebration. The cuisine
       { url: "https://media-cdn.tripadvisor.com/media/attractions-splice-spp-674x446/11/d7/cf/f4.jpg", name: "Camel Safari" },
       { url: "https://www.oyorooms.com/travel-guide/wp-content/uploads/2019/02/city-palace.jpg", name: "City Palace" },
       { url: "https://www.shutterstock.com/preview-440/14160842d/5ec5acfb/Shutterstock_14160842d.jpg", name: "Ghoomar Dance" },
-      { url: "https://cdn.cdnparenting.com/articles/2020/04/07213905/780441559.jpg", name: "Daal Bati" }
+      { url: "https://cdn.cdnparenting.com/articles/2020/04/07213905/780441559.jpg", name: "Dal Baati" }
     ],
     moods: ["Romantic"],
     packageAmount: "₹20,000 - ₹40,000"
