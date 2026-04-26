@@ -254,13 +254,16 @@ export default function DestinationDetailPage() {
 
               {/* Grid visible on mobile/tablet/laptop (up to desktop 2xl) */}
               <div className="grid grid-cols-2 gap-4 2xl:hidden w-full">
-                {destination.culturalImages?.map((src: string, idx: number) => (
+                {destination.culturalImages?.map((img: any, idx: number) => (
                   <motion.div
                     key={idx}
                     whileHover={{ y: -4, scale: 1.02 }}
-                    className="relative h-48 rounded-2xl overflow-hidden shadow-lg border-2 border-white"
+                    className="relative h-48 rounded-2xl overflow-hidden shadow-lg border-2 border-white group"
                   >
-                    <img src={src} alt="Culture" loading="lazy" className="w-full h-full object-cover" />
+                    <img src={img.url || img} alt={img.name || "Culture"} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                      <span className="text-white font-bold text-sm">{img.name}</span>
+                    </div>
                   </motion.div>
                 ))}
               </div>
