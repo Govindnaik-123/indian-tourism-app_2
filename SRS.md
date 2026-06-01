@@ -44,10 +44,11 @@ The Indian Tourism Recommendation Platform is an AI-powered web application desi
 
 The application will include:
 
-- User registration and authentication (email/password and Google OAuth)
+- User registration and authentication (email/password)
+- Admin dashboard for user tracking and management
 - Mood-based destination recommendation system
-- Season-aware travel planning
-- Comprehensive destination information database
+- Season-aware travel planning across 31 Indian states and territories
+- Comprehensive destination information database with live weather
 - User dashboard with personalized preferences
 - Interactive destination exploration
 - Responsive web interface with modern UI/UX
@@ -97,7 +98,7 @@ The Indian Tourism Recommendation Platform is a standalone web application that 
 - **Frontend:** Next.js React application with TypeScript
 - **Backend:** Next.js API routes
 - **Database:** MongoDB for user data and dynamic content
-- **Authentication:** JWT-based session management with OAuth support
+- **Authentication:** JWT-based session management
 - **Styling:** Tailwind CSS with custom components
 - **State Management:** Zustand for client-side state
 
@@ -106,14 +107,15 @@ The Indian Tourism Recommendation Platform is a standalone web application that 
 The major functions of the system include:
 
 1. **User Management**
-   - User registration and login
+   - User registration and login (with Last Login tracking)
    - Profile management
    - Preference settings
+   - Secure Admin Dashboard for monitoring users
 
 2. **Destination Discovery**
-   - Browse all destinations
+   - Browse 31 Indian states and territories
    - Search and filter destinations
-   - View detailed destination information
+   - View detailed destination information with Live Weather integration
 
 3. **Recommendation Engine**
    - Mood-based recommendations
@@ -157,7 +159,7 @@ The major functions of the system include:
 - Database must be MongoDB-compatible
 
 **Business Constraints:**
-- Initial release must include at least 14 destinations
+- Initial release must include 31 Indian states and territories
 - System must handle up to 10,000 concurrent users
 - 99.9% uptime requirement for production
 
@@ -196,20 +198,25 @@ The major functions of the system include:
 - Navigation bar with login/signup links
 
 **Authentication Pages:**
-- Login form (email/password + Google OAuth)
+- Login form (email/password)
 - Registration form with validation
 - Password reset functionality
+
+**Admin Dashboard:**
+- Password-protected access
+- Real-time registered users table
+- Join date and live Last Login tracking
 
 **Destination Pages:**
 - Destination listing with filters
 - Individual destination detail view
-- Image galleries and maps integration
+- Image galleries, live Weather, and Maps integration
 
-**Dashboard:**
+**User Dashboard:**
 - User profile overview
 - Preferences management
 - Favorites and history tracking
-- Quick recommendation access
+- Planned Trips generator across 31 states
 
 #### 3.1.2 Hardware Interfaces
 
@@ -225,11 +232,11 @@ The major functions of the system include:
 
 **Authentication Interfaces:**
 - JWT token generation and validation
-- Google OAuth 2.0 integration
 - Bcrypt password hashing
 
 **External APIs:**
 - Google Maps integration for location data
+- Weather API integration for live weather updates
 - Image optimization services
 
 #### 3.1.4 Communication Interfaces
@@ -249,8 +256,8 @@ The major functions of the system include:
 
 **FR-1.2:** User Login
 - System shall authenticate users with email/password
-- System shall support Google OAuth login
 - System shall generate JWT tokens for session management
+- System shall automatically update the user's Last Login timestamp
 
 **FR-1.3:** Password Security
 - System shall hash passwords using bcrypt
@@ -259,8 +266,8 @@ The major functions of the system include:
 #### 3.2.2 Destination Management
 
 **FR-2.1:** Destination Database
-- System shall store 14+ Indian destinations
-- Each destination shall include: name, description, images, coordinates, budget info, itinerary
+- System shall store data for 31 Indian states and territories
+- Each destination shall include: name, description, live weather, images, coordinates, budget info, itinerary
 - System shall categorize destinations by landscape type (beach, mountain, etc.)
 
 **FR-2.2:** Destination Display
@@ -393,10 +400,13 @@ The major functions of the system include:
 - Preferences (mood, season, budget, travel type, landscape)
 - Favorite destinations array
 - Mood selection history
+- Last Login timestamp
+- Planned Trips array
 
 **DR-2:** Destination Data
 - Basic information (name, location, description)
 - Media content (images, maps)
+- Live weather data integration
 - Travel information (budget, itinerary, best time to visit)
 - Categorization data (mood match, season, landscape)
 

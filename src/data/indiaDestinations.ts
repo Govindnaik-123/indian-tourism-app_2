@@ -1677,7 +1677,7 @@ export const extendedDestinations: Destination[] = [
     ],
     "budget": "Medium",
     "description": "Experience the incredible beauty and culture of Mumbai in Maharashtra.",
-    "image": "https://media.istockphoto.com/photos/vada-pav-or-vada-pav-picture-id538172420?k=6&m=538172420&s=612x612&w=0&h=7koumGadG8WCLsa8XefUK6oFWAgxfZ-PYew_5MhGPJ8="
+    "image": "/images/vadapav.jpg"
   },
   {
     "id": "ext-mah-80",

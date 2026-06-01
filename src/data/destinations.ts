@@ -66,7 +66,7 @@ export const MOODS = [
   {
     type: 'Spiritual',
     color: 'from-orange-400 to-amber-500',
-    imageUrl: 'https://www.travelescape.in/wp-content/uploads/2021/07/Rishikesh-aarti.jpg',
+    imageUrl: '/images/spiritual.png',
     description: 'Inner peace seeking',
     explanation: 'Tamil Nadu, Uttar Pradesh, Uttarakhand, and Haryana are spiritual centers known for their temples, rituals, and religious significance. These states offer strong cultural traditions and sacred environments that encourage devotion and inner connection. Their spiritual atmosphere provides a sense of purpose and peace.',
     benefits: ['Ancient Traditions', 'Sacred Environments', 'Inner Connection'],
@@ -787,7 +787,7 @@ export const DESTINATIONS = [
     moodMatch: ['Calm', 'Romantic', 'Spiritual', 'Stressed'],
     description: 'Venice of the East with houseboat rides, backwater beauty, and coconut palms',
     longDescription: 'Alleppey is famous for its backwaters, houseboats, and serene waterside landscape. A perfect destination for relaxation and romantic getaways.',
-    heroImage: 'https://images.unsplash.com/photo-1621516086772-629ee944bedb?w=1200&h=600&fit=crop',
+    heroImage: 'https://images.unsplash.com/photo-1593693397690-362cb9666fc2?w=1200&h=600&fit=crop',
     gallery: [],
     bestTimeToVisit: ['August', 'September', 'October', 'November', 'December', 'January'],
     budget: {
@@ -903,7 +903,7 @@ export const DESTINATIONS = [
     moodMatch: ['Happy', 'Spiritual', 'Calm'],
     description: 'City of Joy, cultural capital of India with colonial architecture and rich heritage',
     longDescription: 'Kolkata, the capital of West Bengal, is known for its grand colonial architecture, vibrant art scenes, and deep-rooted cultural history. Famous for Durga Puja and delicious sweets.',
-    heroImage: 'https://images.unsplash.com/photo-1558431382-27e39cbef4bc?w=1200&h=600&fit=crop',
+    heroImage: 'https://images.unsplash.com/photo-1605649487212-47bdab064df7?w=1200&h=600&fit=crop',
     gallery: [],
     bestTimeToVisit: ['October', 'November', 'December', 'January', 'February'],
     budget: {
@@ -951,7 +951,7 @@ export const DESTINATIONS = [
     moodMatch: ['Romantic', 'Calm', 'Adventurous'],
     description: 'Queen of the Hills, famous for tea gardens and Kanchenjunga views',
     longDescription: 'Darjeeling is a world-renowned hill station in West Bengal, famous for its sprawling tea estates, the UNESCO Heritage Toy Train, and breathtaking sunrise views of the Kanchenjunga range.',
-    heroImage: 'https://images.unsplash.com/photo-1544435253-f0ee498e94be?w=1200&h=600&fit=crop',
+    heroImage: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=1200&h=600&fit=crop',
     gallery: [],
     bestTimeToVisit: ['April', 'May', 'June', 'October', 'November'],
     budget: {
@@ -999,7 +999,7 @@ export const DESTINATIONS = [
     moodMatch: ['Adventurous', 'Calm', 'Lonely'],
     description: 'Largest mangrove forest and home of the Royal Bengal Tiger',
     longDescription: 'The Sundarbans is a UNESCO World Heritage site and the world\'s largest mangrove forest. It is famous for its unique ecosystem, diverse wildlife, and the majestic Royal Bengal Tiger.',
-    heroImage: 'https://images.unsplash.com/photo-1623594040003-8889c093a8d7?w=1200&h=600&fit=crop',
+    heroImage: 'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=1200&h=600&fit=crop',
     gallery: [],
     bestTimeToVisit: ['November', 'December', 'January', 'February'],
     budget: {
@@ -1047,7 +1047,7 @@ export const DESTINATIONS = [
     moodMatch: ['Happy', 'Excited', 'Romantic'],
     description: 'Popular weekend beach getaway with cashew plantations and calm waters',
     longDescription: 'Digha is West Bengal\'s most popular sea resort. Known for its flat, hard beaches and shallow waters, it\'s a perfect family vacation spot by the Bay of Bengal.',
-    heroImage: 'https://images.unsplash.com/photo-1590001158193-79017998ee61?w=1200&h=600&fit=crop',
+    heroImage: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&h=600&fit=crop',
     gallery: [],
     bestTimeToVisit: ['October', 'November', 'December', 'January', 'February', 'March'],
     budget: {

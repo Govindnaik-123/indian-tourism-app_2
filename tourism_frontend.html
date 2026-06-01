@@ -1,0 +1,2574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🇮🇳 IndianTravel - AI-Powered Tourism Recommendation Platform</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: '#efba6c',
+                        darkBlue: '#364d59',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS Styling for premium effects -->
+    <style>
+        body {
+            font-family: 'Outfit', 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #364d59;
+            scroll-behavior: smooth;
+        }
+
+        /* Glassmorphism Styles */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .glass-panel-dark {
+            background: rgba(54, 77, 89, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.18);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hero Overlay Styling */
+        .hero-overlay {
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0.3) 0%,
+                rgba(0, 0, 0, 0.6) 60%,
+                rgba(0, 0, 0, 0.85) 100%
+            );
+        }
+
+        .section-watermark {
+            position: absolute;
+            font-size: 15vw;
+            font-weight: 900;
+            color: rgba(54, 77, 89, 0.03);
+            line-height: 1;
+            z-index: 0;
+            pointer-events: none;
+            user-select: none;
+            font-family: 'Outfit', sans-serif;
+            text-transform: uppercase;
+        }
+
+        /* Season Background Canvas Overlay */
+        #season-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 40;
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #efba6c;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d69e4c;
+        }
+
+        /* Theme transition rules */
+        .theme-transition {
+            transition: background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        /* Dynamic Glows */
+        .mood-glow {
+            filter: drop-shadow(0 0 15px var(--mood-glow-color, rgba(239, 186, 108, 0.4)));
+        }
+
+        /* Active Navigation Link Indicator */
+        .nav-indicator {
+            position: relative;
+        }
+        .nav-indicator::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: #efba6c;
+            transition: width 0.3s ease;
+        }
+        .nav-indicator:hover::after, .nav-indicator.active::after {
+            width: 100%;
+        }
+
+        /* Interactive Showcase Cards */
+        .showcase-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            transition: all 0.5s ease;
+        }
+        .showcase-card img {
+            transition: transform 0.7s ease;
+        }
+        .showcase-card:hover img {
+            transform: scale(1.15) rotate(1deg);
+        }
+        .showcase-overlay {
+            background: linear-gradient(
+                to top,
+                rgba(0, 0, 0, 0.9) 0%,
+                rgba(0, 0, 0, 0.4) 60%,
+                transparent 100%
+            );
+        }
+    </style>
+</head>
+<body class="theme-transition font-sans">
+
+    <!-- Canvas for Seasonal Animations (Overlay) -->
+    <canvas id="season-canvas"></canvas>
+
+    <!-- ── NAVIGATION BAR ── -->
+    <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-300 glass-panel py-4 px-6 md:px-12 flex justify-between items-center shadow-sm">
+        <a href="#" class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
+            <span class="text-3xl">🇮🇳</span>
+            <div class="flex flex-col">
+                <span class="text-xl font-black tracking-wider text-darkBlue">Indian<span class="text-gold">Travel</span></span>
+                <span class="text-[9px] uppercase tracking-[0.2em] font-semibold text-gray-500">AI Recommender</span>
+            </div>
+        </a>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center gap-8 font-semibold text-sm text-darkBlue">
+            <a href="#" onclick="switchTab('home')" class="nav-indicator active hover:text-gold transition-colors py-1 px-2" id="nav-home">Home</a>
+            <a href="#mood-selector" onclick="switchTab('home'); setTimeout(() => document.getElementById('mood-selector')?.scrollIntoView({behavior: 'smooth'}), 200)" class="nav-indicator hover:text-gold transition-colors py-1 px-2">Discover</a>
+            <a href="#featured-trips" onclick="switchTab('home'); setTimeout(() => document.getElementById('featured-trips')?.scrollIntoView({behavior: 'smooth'}), 200)" class="nav-indicator hover:text-gold transition-colors py-1 px-2">Featured</a>
+            
+            <!-- Protected tabs, visible to all but showing warning/redirect if not logged in -->
+            <a href="#" onclick="switchTab('dashboard')" class="nav-indicator hover:text-gold transition-colors py-1 px-2" id="nav-dashboard">Dashboard</a>
+            <a href="#" onclick="switchTab('planner')" class="nav-indicator hover:text-gold transition-colors py-1 px-2" id="nav-planner">Travel Planner</a>
+            <a href="#" onclick="switchTab('admin')" class="nav-indicator hover:text-gold transition-colors py-1 px-2 text-rose-500 hover:text-rose-600" id="nav-admin"><i class="fa-solid fa-lock mr-1"></i>Admin</a>
+        </div>
+
+        <!-- Auth and Controls -->
+        <div class="flex items-center gap-4">
+            <!-- Active Mood indicator in Navbar -->
+            <div id="active-mood-indicator" class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold border border-gold/30 bg-gold/10 text-darkBlue shadow-sm">
+                <span id="active-mood-dot" class="w-2.5 h-2.5 rounded-full bg-gold animate-pulse"></span>
+                <span>Mood: <span id="active-mood-name">None</span></span>
+            </div>
+
+            <!-- Login / Profile Button -->
+            <div id="auth-buttons-container">
+                <!-- Toggleable by JS state -->
+                <button onclick="openAuthModal('login')" class="px-6 py-2 border border-darkBlue text-darkBlue font-bold rounded-none hover:bg-darkBlue hover:text-white transition-all duration-300 text-sm">
+                    LOGIN
+                </button>
+            </div>
+            
+            <!-- Mobile Menu Toggle Button -->
+            <button onclick="toggleMobileMenu()" class="md:hidden text-2xl text-darkBlue p-1 focus:outline-none">
+                <i class="fa-solid fa-bars" id="mobile-menu-icon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Drawer -->
+    <div id="mobile-menu" class="hidden fixed inset-0 z-40 bg-white/95 backdrop-blur-md pt-24 px-8 flex-col gap-6 text-xl font-bold text-darkBlue md:hidden">
+        <a href="#" onclick="switchTab('home'); toggleMobileMenu()" class="border-b border-gray-100 py-3">Home</a>
+        <a href="#mood-selector" onclick="switchTab('home'); toggleMobileMenu(); setTimeout(() => document.getElementById('mood-selector')?.scrollIntoView({behavior: 'smooth'}), 200)" class="border-b border-gray-100 py-3">Discover</a>
+        <a href="#" onclick="switchTab('dashboard'); toggleMobileMenu()" class="border-b border-gray-100 py-3">Dashboard</a>
+        <a href="#" onclick="switchTab('planner'); toggleMobileMenu()" class="border-b border-gray-100 py-3">Travel Planner</a>
+        <a href="#" onclick="switchTab('admin'); toggleMobileMenu()" class="border-b border-gray-100 py-3 text-rose-500"><i class="fa-solid fa-lock mr-2"></i>Admin Dashboard</a>
+        <div class="mt-6 flex flex-col gap-4">
+            <div id="mobile-mood-indicator" class="hidden items-center gap-2 py-2 text-sm text-gray-600">
+                <span class="w-3 h-3 rounded-full bg-gold"></span>
+                <span>Active Mood: <strong id="mobile-mood-name">Happy</strong></span>
+            </div>
+            <div id="mobile-auth-container">
+                <button onclick="openAuthModal('login'); toggleMobileMenu()" class="w-full py-3 bg-darkBlue text-white font-bold tracking-wider">LOGIN</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ────────────────────────────────────────────────────────── -->
+    <!-- ── TAB: HOME (Main UI Landing) ── -->
+    <!-- ────────────────────────────────────────────────────────── -->
+    <div id="tab-home" class="tab-content block">
+        
+        <!-- ── HERO SECTION ── -->
+        <section class="relative h-screen flex items-center justify-center overflow-hidden bg-black">
+            <div class="absolute inset-0 z-0">
+                <!-- Large beautiful banner with zoom effect -->
+                <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&q=80" alt="Taj Mahal" class="w-full h-full object-cover object-top opacity-90 transition-transform duration-[10s] scale-105 hover:scale-100">
+                <div class="absolute inset-0 hero-overlay z-10"></div>
+            </div>
+
+            <div class="relative z-20 text-center max-w-5xl px-4 mt-12">
+                <span class="text-gold uppercase tracking-[0.3em] font-black text-xs md:text-sm mb-4 block animate-pulse">Incredible India awaits your soul</span>
+                <h1 class="text-5xl md:text-8xl font-black text-white mb-6 leading-tight select-none">
+                    Experience the Magic <br> of <span class="text-gold">India</span>
+                </h1>
+                <p class="text-base md:text-xl text-white/80 mb-12 font-medium max-w-2xl mx-auto leading-relaxed tracking-wide uppercase">
+                    Explore rich heritage, vibrant cultures, and breathtaking landscapes tailored to your unique emotional state.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button onclick="document.getElementById('mood-selector').scrollIntoView({behavior: 'smooth'})" class="w-full sm:w-auto px-12 py-5 bg-gold text-darkBlue font-black tracking-[0.2em] shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 rounded-none text-sm">
+                        EXPLORE NOW
+                    </button>
+                    <button onclick="openLearnMoreModal()" class="w-full sm:w-auto px-10 py-5 border border-white/40 text-white font-bold tracking-widest hover:bg-white/10 active:scale-95 transition-all duration-300 rounded-none text-sm backdrop-blur-sm">
+                        LEARN MORE
+                    </button>
+                </div>
+            </div>
+
+            <!-- Scroll Down Indicator -->
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 text-white/70 animate-bounce cursor-pointer hover:text-gold" onclick="document.getElementById('explore-section').scrollIntoView({behavior: 'smooth'})">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M7 13l5 5 5-5" />
+                    <path d="M12 18V6" />
+                </svg>
+            </div>
+        </section>
+
+        <!-- ── THE JOURNEY & INTERACTIVE 3D GLOBE ── -->
+        <section id="explore-section" class="py-28 px-6 md:px-12 max-w-7xl mx-auto relative">
+            <div class="section-watermark top-10 left-0">India</div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                <!-- Story Description -->
+                <div class="lg:col-span-5 relative z-10">
+                    <span class="text-gold font-bold tracking-[0.2em] text-xs uppercase mb-3 block underline decoration-gold underline-offset-8 w-fit">The Journey</span>
+                    <h2 class="text-4xl md:text-5xl font-black text-darkBlue mb-6 leading-tight">Interactive Exploration of Indian Landmarks</h2>
+                    <p class="text-base text-gray-600 mb-8 leading-relaxed">
+                        Our recommendation engine matches your state of mind with iconic sites. Hover and rotate the interactive globe to discover historic monuments and beautiful getaways across the sub-continent.
+                    </p>
+                    <div class="flex flex-col gap-4 border-l-4 border-gold/40 pl-6 my-6 italic text-gray-500">
+                        "To other countries, I may go as a tourist. To India, I come as a pilgrim."
+                        <span class="text-xs font-bold uppercase tracking-wider text-darkBlue mt-1 not-italic">— Martin Luther King Jr.</span>
+                    </div>
+                    <button onclick="openLearnMoreModal()" class="px-8 py-3.5 border-2 border-darkBlue text-darkBlue hover:bg-darkBlue hover:text-white font-bold transition-all duration-300 text-sm">
+                        DISCOVER OUR HERITAGE
+                    </button>
+                </div>
+
+                <!-- 3D Interactive Canvas Globe -->
+                <div class="lg:col-span-7 flex flex-col items-center justify-center">
+                    <div class="relative bg-gradient-to-br from-darkBlue/5 to-darkBlue/10 p-6 rounded-3xl border border-darkBlue/5 shadow-inner w-full max-w-xl aspect-square flex flex-col items-center justify-center group">
+                        
+                        <!-- Canvas Container -->
+                        <canvas id="globe-canvas" class="w-full h-full cursor-grab active:cursor-grabbing max-w-[400px] max-h-[400px] z-10"></canvas>
+                        
+                        <!-- Floating Controls Overlay -->
+                        <div class="absolute bottom-4 left-4 right-4 flex justify-between items-center z-20 text-[11px] text-gray-500 font-bold uppercase tracking-wider">
+                            <span><i class="fa-solid fa-arrows-spin animate-spin mr-1"></i> Drag to Rotate</span>
+                            <span class="text-gold"><i class="fa-solid fa-circle-dot animate-ping mr-1"></i> Click Dots for Details</span>
+                        </div>
+                        
+                        <!-- Landmark Tooltip overlay -->
+                        <div id="globe-tooltip" class="absolute pointer-events-none bg-darkBlue text-white text-xs px-3 py-1.5 rounded-lg opacity-0 shadow-lg transform -translate-y-full transition-opacity duration-200 z-30 font-semibold flex flex-col border border-gold/20">
+                            <span id="tooltip-title" class="font-bold text-gold">Taj Mahal</span>
+                            <span id="tooltip-state" class="text-[9px] uppercase tracking-wider text-white/70">Uttar Pradesh</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── MOOD & SEASON SELECTOR ── -->
+        <section id="mood-selector" class="py-24 bg-[#f8f9fa] border-t border-b border-gray-100 relative">
+            <div class="section-watermark top-10 right-10 text-right">Aura</div>
+
+            <div class="max-w-7xl mx-auto px-6 md:px-12">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-gold font-bold tracking-[0.2em] text-xs uppercase mb-3 block">Emotional AI</span>
+                    <h2 class="text-4xl md:text-5xl font-black text-darkBlue mb-4">How are you feeling today?</h2>
+                    <div class="w-20 h-1 bg-gold mx-auto mb-6"></div>
+                    <p class="text-gray-500 text-sm md:text-base">
+                        Select a mood and season, and watch the platform dynamically shift color schemes and load tailored destinations across India matching your vibe.
+                    </p>
+
+                    <!-- Season Switcher Row -->
+                    <div class="flex flex-wrap justify-center gap-3 mt-8">
+                        <span class="w-full text-xs font-bold uppercase text-gray-400 tracking-widest mb-1">Select Current Season</span>
+                        <button onclick="setSeason('Summer')" class="season-btn flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-200 bg-white font-bold text-xs uppercase tracking-wider text-gray-500 hover:border-gold hover:text-gold transition-all duration-300 shadow-sm" id="btn-season-Summer">
+                            ☀️ Summer
+                        </button>
+                        <button onclick="setSeason('Monsoon')" class="season-btn flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-200 bg-white font-bold text-xs uppercase tracking-wider text-gray-500 hover:border-gold hover:text-gold transition-all duration-300 shadow-sm" id="btn-season-Monsoon">
+                            🌧️ Monsoon
+                        </button>
+                        <button onclick="setSeason('Winter')" class="season-btn flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-200 bg-white font-bold text-xs uppercase tracking-wider text-gray-500 hover:border-gold hover:text-gold transition-all duration-300 shadow-sm" id="btn-season-Winter">
+                            ❄️ Winter
+                        </button>
+                        <button onclick="setSeason('Spring')" class="season-btn flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-200 bg-white font-bold text-xs uppercase tracking-wider text-gray-500 hover:border-gold hover:text-gold transition-all duration-300 shadow-sm" id="btn-season-Spring">
+                            🌸 Spring
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 9 Mood Cards Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-9 gap-4 max-w-[1400px] mx-auto px-2">
+                    <!-- Cards will be populated dynamically by JS, but structured nicely -->
+                    <!-- Happy -->
+                    <button onclick="selectMood('Happy')" class="mood-card-element group flex flex-col items-center bg-white p-5 rounded-2xl border border-gray-100 hover:border-yellow-400/50 hover:shadow-xl transition-all duration-500" id="mood-card-Happy">
+                        <div class="w-12 h-12 rounded-full bg-yellow-50 flex items-center justify-center text-yellow-500 group-hover:scale-110 transition-transform duration-300 text-xl shadow-sm mb-3">
+                            <i class="fa-solid fa-face-smile"></i>
+                        </div>
+                        <span class="font-bold text-sm text-darkBlue">Happy</span>
+                        <span class="text-[9px] text-gray-400 mt-1 uppercase tracking-wider">Joyful</span>
+                    </button>
+
+                    <!-- Sad -->
+                    <button onclick="selectMood('Sad')" class="mood-card-element group flex flex-col items-center bg-white p-5 rounded-2xl border border-gray-100 hover:border-blue-400/50 hover:shadow-xl transition-all duration-500" id="mood-card-Sad">
+                        <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform duration-300 text-xl shadow-sm mb-3">
+                            <i class="fa-solid fa-face-sad-tear"></i>
+                        </div>
+                        <span class="font-bold text-sm text-darkBlue">Sad</span>
+                        <span class="text-[9px] text-gray-400 mt-1 uppercase tracking-wider">Melancholy</span>
+                    </button>
+
+                    <!-- Lonely -->
+                    <button onclick="selectMood('Lonely')" class="mood-card-element group flex flex-col items-center bg-white p-5 rounded-2xl border border-gray-100 hover:border-purple-400/50 hover:shadow-xl transition-all duration-500" id="mood-card-Lonely">
+                        <div class="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center text-purple-500 group-hover:scale-110 transition-transform duration-300 text-xl shadow-sm mb-3">
+                            <i class="fa-solid fa-user-ninja"></i>
+                        </div>
+                        <span class="font-bold text-sm text-darkBlue">Lonely</span>
+                        <span class="text-[9px] text-gray-400 mt-1 uppercase tracking-wider">Solitude</span>
+                    </button>
+
+                    <!-- Romantic -->
+                    <button onclick="selectMood('Romantic')" class="mood-card-element group flex flex-col items-center bg-white p-5 rounded-2xl border border-gray-100 hover:border-rose-400/50 hover:shadow-xl transition-all duration-500" id="mood-card-Romantic">
+                        <div class="w-12 h-12 rounded-full bg-rose-50 flex items-center justify-center text-rose-500 group-hover:scale-110 transition-transform duration-300 text-xl shadow-sm mb-3">
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+                        <span class="font-bold text-sm text-darkBlue">Romantic</span>
+                        <span class="text-[9px] text-gray-400 mt-1 uppercase tracking-wider">Love</span>
+                    </button>
+
+                    <!-- Adventurous -->
+                    <button onclick="selectMood('Adventurous')" class="mood-card-element group flex flex-col items-center bg-white p-5 rounded-2xl border border-gray-100 hover:border-orange-500/50 hover:shadow-xl transition-all duration-500" id="mood-card-Adventurous">
+                        <div class="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center text-orange-500 group-hover:scale-110 transition-transform duration-300 text-xl shadow-sm mb-3">
+                            <i class="fa-solid fa-mountain-sun"></i>
+                        </div>
+                        <span class="font-bold text-sm text-darkBlue">Adventurous</span>
+                        <span class="text-[9px] text-gray-400 mt-1 uppercase tracking-wider">Thrilled</span>
+                    </button>
+
+                    <!-- Stressed -->
+                    <button onclick="selectMood('Stressed')" class="mood-card-element group flex flex-col items-center bg-white p-5 rounded-2xl border border-gray-100 hover:border-gray-500/50 hover:shadow-xl transition-all duration-500" id="mood-card-Stressed">
+                        <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 group-hover:scale-110 transition-transform duration-300 text-xl shadow-sm mb-3">
+                            <i class="fa-solid fa-brain-circuit"></i>
+                        </div>
+                        <span class="font-bold text-sm text-darkBlue">Stressed</span>
+                        <span class="text-[9px] text-gray-400 mt-1 uppercase tracking-wider">Overwhelmed</span>
+                    </button>
+
+                    <!-- Calm -->
+                    <button onclick="selectMood('Calm')" class="mood-card-element group flex flex-col items-center bg-white p-5 rounded-2xl border border-gray-100 hover:border-emerald-500/50 hover:shadow-xl transition-all duration-500" id="mood-card-Calm">
+                        <div class="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-500 group-hover:scale-110 transition-transform duration-300 text-xl shadow-sm mb-3">
+                            <i class="fa-solid fa-wind"></i>
+                        </div>
+                        <span class="font-bold text-sm text-darkBlue">Calm</span>
+                        <span class="text-[9px] text-gray-400 mt-1 uppercase tracking-wider">Zen</span>
+                    </button>
+
+                    <!-- Excited -->
+                    <button onclick="selectMood('Excited')" class="mood-card-element group flex flex-col items-center bg-white p-5 rounded-2xl border border-gray-100 hover:border-amber-400/50 hover:shadow-xl transition-all duration-500" id="mood-card-Excited">
+                        <div class="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center text-amber-500 group-hover:scale-110 transition-transform duration-300 text-xl shadow-sm mb-3">
+                            <i class="fa-solid fa-fire"></i>
+                        </div>
+                        <span class="font-bold text-sm text-darkBlue">Excited</span>
+                        <span class="text-[9px] text-gray-400 mt-1 uppercase tracking-wider">Energetic</span>
+                    </button>
+
+                    <!-- Spiritual -->
+                    <button onclick="selectMood('Spiritual')" class="mood-card-element group flex flex-col items-center bg-white p-5 rounded-2xl border border-gray-100 hover:border-orange-400/50 hover:shadow-xl transition-all duration-500" id="mood-card-Spiritual">
+                        <div class="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center text-orange-500 group-hover:scale-110 transition-transform duration-300 text-xl shadow-sm mb-3">
+                            <i class="fa-solid fa-om"></i>
+                        </div>
+                        <span class="font-bold text-sm text-darkBlue">Spiritual</span>
+                        <span class="text-[9px] text-gray-400 mt-1 uppercase tracking-wider">Devout</span>
+                    </button>
+                </div>
+                
+                <!-- Mood Explanation & Recommendations Panel -->
+                <div id="mood-detail-panel" class="hidden mt-16 max-w-5xl mx-auto bg-white rounded-3xl border border-gray-100 shadow-2xl p-8 md:p-12 overflow-hidden transition-all duration-500">
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                        <div class="md:col-span-8">
+                            <span id="mood-explanation-badge" class="px-4 py-1.5 rounded-full text-xs font-bold tracking-widest bg-yellow-50 text-yellow-600 border border-yellow-200 inline-block mb-4">MOOD AURA</span>
+                            <h3 class="text-2xl md:text-3xl font-black text-darkBlue mb-4" id="mood-explanation-title">Connecting Mood and Destinations</h3>
+                            <p class="text-sm md:text-base text-gray-500 leading-relaxed mb-6" id="mood-explanation-text">
+                                The psychological traits mapped to this mood correspond beautifully with regional vibes across Indian states. Select a destination card below to explore deeper.
+                            </p>
+                            <!-- Benefits -->
+                            <div class="flex flex-wrap gap-3" id="mood-benefits-container">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                        <div class="md:col-span-4 flex items-center justify-center">
+                            <img id="mood-explanation-img" src="" alt="Mood Representation" class="w-full max-w-[240px] aspect-video object-cover rounded-2xl shadow-md border border-gray-100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── RECOMMENDATIONS GRID ── -->
+        <section id="recommendations-section" class="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+            <div class="text-center max-w-xl mx-auto mb-16">
+                <span class="text-gold font-bold tracking-[0.2em] text-xs uppercase mb-3 block">Matches Found</span>
+                <h2 class="text-3xl md:text-4xl font-black text-darkBlue mb-4" id="recommendations-title">Recommended Escapes</h2>
+                <div class="w-16 h-1 bg-gold mx-auto mb-4"></div>
+                <p class="text-sm text-gray-500" id="recommendations-subtitle">Showing default destinations. Select a mood and season above to filter recommendations!</p>
+            </div>
+
+            <!-- Destinations Grid -->
+            <div id="destinations-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Dynamically loaded by JS -->
+            </div>
+        </section>
+
+        <!-- ── FEATURED JOURNEYS (Showcase Cards) ── -->
+        <section id="featured-trips" class="py-32 px-6 md:px-12 bg-darkBlue text-white relative overflow-hidden">
+            <div class="section-watermark top-10 left-10 !color-white opacity-5">Promoted</div>
+            
+            <div class="max-w-7xl mx-auto">
+                <div class="flex justify-between items-end mb-16">
+                    <div>
+                        <span class="text-gold font-bold tracking-[0.2em] text-xs uppercase mb-3 block">Top Landmarks</span>
+                        <h2 class="text-4xl md:text-5xl font-black text-white leading-tight">Featured Journeys</h2>
+                    </div>
+                    <button onclick="document.getElementById('mood-selector').scrollIntoView({behavior: 'smooth'})" class="hidden md:block text-xs font-black tracking-widest text-gold hover:text-white transition-colors">
+                        DISCOVER BY MOOD <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+
+                <!-- Showcase Cards Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                    <!-- Taj Mahal -->
+                    <div class="showcase-card h-[400px] flex items-end p-6 cursor-pointer" onclick="showDestinationDetailsDirect('Goa')">
+                        <img src="https://www.postposmo.com/wp-content/uploads/2024/07/Tajmahalcolor.jpg" alt="Taj Mahal" class="absolute inset-0 w-full h-full object-cover z-0">
+                        <div class="absolute inset-0 showcase-overlay z-10"></div>
+                        <div class="relative z-20">
+                            <span class="text-[9px] font-bold text-gold uppercase tracking-[0.2em]">Agra, UP</span>
+                            <h3 class="text-2xl font-black text-white mt-1">Taj Mahal</h3>
+                            <p class="text-xs text-white/80 font-medium mt-2 leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity">
+                                Symbol of eternal love and breathtaking Mughal architecture.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Varanasi -->
+                    <div class="showcase-card h-[400px] flex items-end p-6 cursor-pointer" onclick="showDestinationDetailsDirect('Varanasi')">
+                        <img src="https://www.indiatravel.app/wp-content/uploads/2024/04/varanasi-climate-advice.jpg" alt="Varanasi" class="absolute inset-0 w-full h-full object-cover z-0">
+                        <div class="absolute inset-0 showcase-overlay z-10"></div>
+                        <div class="relative z-20">
+                            <span class="text-[9px] font-bold text-gold uppercase tracking-[0.2em]">Uttar Pradesh</span>
+                            <h3 class="text-2xl font-black text-white mt-1">Varanasi</h3>
+                            <p class="text-xs text-white/80 font-medium mt-2 leading-relaxed">
+                                Spiritual capital of Ganges, ancient prayers and ghats.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Jaipur -->
+                    <div class="showcase-card h-[400px] flex items-end p-6 cursor-pointer" onclick="showDestinationDetailsDirect('Jaisalmer')">
+                        <img src="https://alumni.harvard.edu/sites/default/files/styles/trip_photo/public/trip/main_photo/Adobe_Hawa_Mahal_Palace_960x640.jpeg?itok=dOQi6Bqz" alt="Jaipur" class="absolute inset-0 w-full h-full object-cover z-0">
+                        <div class="absolute inset-0 showcase-overlay z-10"></div>
+                        <div class="relative z-20">
+                            <span class="text-[9px] font-bold text-gold uppercase tracking-[0.2em]">Rajasthan</span>
+                            <h3 class="text-2xl font-black text-white mt-1">Jaipur</h3>
+                            <p class="text-xs text-white/80 font-medium mt-2 leading-relaxed">
+                                Palace of winds, majestic fortresses and pink facades.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Charminar -->
+                    <div class="showcase-card h-[400px] flex items-end p-6 cursor-pointer" onclick="showDestinationDetailsDirect('Gokarna')">
+                        <img src="https://media.tacdn.com/media/attractions-splice-spp-720x480/07/2d/52/bd.jpg" alt="Charminar" class="absolute inset-0 w-full h-full object-cover z-0">
+                        <div class="absolute inset-0 showcase-overlay z-10"></div>
+                        <div class="relative z-20">
+                            <span class="text-[9px] font-bold text-gold uppercase tracking-[0.2em]">Hyderabad</span>
+                            <h3 class="text-2xl font-black text-white mt-1">Charminar</h3>
+                            <p class="text-xs text-white/80 font-medium mt-2 leading-relaxed">
+                                Grand arches and rich Nizami culinary heritage.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Ooty -->
+                    <div class="showcase-card h-[400px] flex items-end p-6 cursor-pointer" onclick="showDestinationDetailsDirect('Ooty')">
+                        <img src="https://i0.wp.com/savorytales.com/wp-content/uploads/2017/12/IMG_7130.jpg?w=2400&ssl=1" alt="Ooty" class="absolute inset-0 w-full h-full object-cover z-0">
+                        <div class="absolute inset-0 showcase-overlay z-10"></div>
+                        <div class="relative z-20">
+                            <span class="text-[9px] font-bold text-gold uppercase tracking-[0.2em]">Tamil Nadu</span>
+                            <h3 class="text-2xl font-black text-white mt-1">Ooty</h3>
+                            <p class="text-xs text-white/80 font-medium mt-2 leading-relaxed">
+                                Tea hills and vintage toy train heritage of Nilgiris.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── STATS / ACCELERATORS SECTION ── -->
+        <section class="py-24 bg-gold text-darkBlue relative">
+            <div class="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-2 lg:grid-cols-4 gap-12 text-center font-bold">
+                <div class="flex flex-col">
+                    <span class="text-5xl md:text-7xl font-black mb-2 select-none">31</span>
+                    <span class="text-xs uppercase tracking-widest font-black opacity-70">States & UTs Covered</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-5xl md:text-7xl font-black mb-2 select-none">14+</span>
+                    <span class="text-xs uppercase tracking-widest font-black opacity-70">Handpicked Spots</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-5xl md:text-7xl font-black mb-2 select-none">9</span>
+                    <span class="text-xs uppercase tracking-widest font-black opacity-70">Mood Dimensions</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-5xl md:text-7xl font-black mb-2 select-none">4.9★</span>
+                    <span class="text-xs uppercase tracking-widest font-black opacity-70">Traveler Rating</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── BOTTOM CALL TO ACTION ── -->
+        <section class="py-28 px-6 bg-[#f8f9fa] border-t border-gray-100 flex flex-col items-center text-center">
+            <h2 class="text-4xl md:text-6xl font-black text-darkBlue mb-6 leading-tight">Ready to rediscover yourself?</h2>
+            <p class="text-base text-gray-500 max-w-2xl leading-relaxed mb-10">
+                Join thousands of mindful travelers who matches their psychological states with the timeless locations of Indian subcontinent.
+            </p>
+            <button onclick="document.getElementById('mood-selector').scrollIntoView({behavior: 'smooth'})" class="px-10 py-4 bg-darkBlue text-white font-black tracking-widest hover:bg-gold hover:text-darkBlue hover:scale-105 active:scale-95 transition-all duration-300 shadow-xl text-sm">
+                GET STARTED NOW
+            </button>
+        </section>
+    </div>
+
+    <!-- ────────────────────────────────────────────────────────── -->
+    <!-- ── TAB: USER DASHBOARD (Protected View) ── -->
+    <!-- ────────────────────────────────────────────────────────── -->
+    <div id="tab-dashboard" class="tab-content hidden pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto">
+        <!-- Banner welcome -->
+        <div class="bg-gradient-to-br from-darkBlue to-slate-800 rounded-3xl p-8 md:p-12 text-white shadow-xl relative overflow-hidden mb-12">
+            <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div>
+                    <span class="text-gold font-bold uppercase tracking-[0.25em] text-xs block mb-2"><i class="fa-solid fa-circle-check text-green-400 mr-1"></i> Traveler Verified Session</span>
+                    <h1 class="text-4xl md:text-5xl font-black mb-2">Welcome Back, <span id="dash-username" class="text-gold">Guest</span>!</h1>
+                    <p class="text-white/70 text-sm md:text-base font-medium max-w-md">Your emotional preference is tracked securely. Start exploring custom state itineraries.</p>
+                </div>
+                <div class="flex gap-4">
+                    <button onclick="switchTab('planner')" class="px-6 py-3 bg-gold text-darkBlue font-bold text-xs uppercase tracking-wider shadow-md hover:bg-white hover:text-darkBlue transition-all">
+                        Create New Plan
+                    </button>
+                    <button onclick="handleLogout()" class="px-5 py-3 border border-white/20 text-white font-bold text-xs uppercase tracking-wider hover:bg-white/15 transition-all">
+                        LOGOUT <i class="fa-solid fa-right-from-bracket ml-2"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Decors -->
+            <div class="absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-gold/10 blur-xl"></div>
+        </div>
+
+        <!-- Traveler Stats Panel -->
+        <h2 class="text-2xl font-black text-darkBlue mb-6 flex items-center gap-3">
+            <span>📊</span> Your Travel Statistics
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-5">
+                <div class="w-12 h-12 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center text-xl"><i class="fa-solid fa-map-location-dot"></i></div>
+                <div>
+                    <h3 class="text-2xl font-bold text-darkBlue" id="stat-visited">2</h3>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Places Visited</p>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-5">
+                <div class="w-12 h-12 rounded-xl bg-red-50 text-red-500 flex items-center justify-center text-xl"><i class="fa-solid fa-heart"></i></div>
+                <div>
+                    <h3 class="text-2xl font-bold text-darkBlue" id="stat-saved">0</h3>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Saved Escapes</p>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-5">
+                <div class="w-12 h-12 rounded-xl bg-yellow-50 text-yellow-500 flex items-center justify-center text-xl"><i class="fa-solid fa-star"></i></div>
+                <div>
+                    <h3 class="text-2xl font-bold text-darkBlue">4.8</h3>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Average Rating</p>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-5">
+                <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center text-xl"><i class="fa-solid fa-pen-to-square"></i></div>
+                <div>
+                    <h3 class="text-2xl font-bold text-darkBlue" id="stat-reviews">3</h3>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Reviews Written</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <!-- Left Side: Saved Escapes -->
+            <div class="lg:col-span-8">
+                <h2 class="text-2xl font-black text-darkBlue mb-6 flex items-center gap-3">
+                    <span>❤️</span> Saved Escapes
+                </h2>
+                <div id="saved-escapes-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Populated by bookmarks in user object -->
+                    <div class="col-span-full py-12 text-center text-gray-400 font-semibold border-2 border-dashed border-gray-200 rounded-2xl">
+                        No saved escapes yet! Browse home recommended cards and tap the heart icon to save.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Mood Analytics -->
+            <div class="lg:col-span-4">
+                <h2 class="text-2xl font-black text-darkBlue mb-6 flex items-center gap-3">
+                    <span>🧠</span> Mood Analytics
+                </h2>
+                <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-md">
+                    <p class="text-xs text-gray-400 uppercase tracking-widest font-black mb-6">Frequently Searched Moods</p>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-xs font-bold text-darkBlue mb-1">
+                                <span>Spiritual</span>
+                                <span>65%</span>
+                            </div>
+                            <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-orange-400" style="width: 65%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs font-bold text-darkBlue mb-1">
+                                <span>Calm</span>
+                                <span>45%</span>
+                            </div>
+                            <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-emerald-400" style="width: 45%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs font-bold text-darkBlue mb-1">
+                                <span>Adventurous</span>
+                                <span>25%</span>
+                            </div>
+                            <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-red-400" style="width: 25%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ────────────────────────────────────────────────────────── -->
+    <!-- ── TAB: TRAVEL PLANNER (Protected View) ── -->
+    <!-- ────────────────────────────────────────────────────────── -->
+    <div id="tab-planner" class="tab-content hidden pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-black text-darkBlue mb-3">Interactive Travel Planner</h1>
+            <p class="text-gray-500 mb-10">Configure your dates, state parameters, and details. Your travel plans persist automatically.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 mb-12">
+                <!-- Planning Form -->
+                <div class="md:col-span-7 bg-white p-6 md:p-8 border border-gray-100 shadow-xl rounded-2xl">
+                    <h3 class="text-xl font-bold text-darkBlue mb-6"><i class="fa-solid fa-compass text-gold mr-2"></i> Create New Plan</h3>
+                    
+                    <form onsubmit="handleCreatePlan(event)" class="space-y-5">
+                        <!-- Select State -->
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Destination State</label>
+                            <select id="plan-state" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 focus:border-gold focus:outline-none rounded-lg text-sm font-semibold" required>
+                                <option value="" disabled selected>Choose a state...</option>
+                                <option value="Goa">Goa</option>
+                                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                <option value="Kerala">Kerala</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Ladakh">Ladakh</option>
+                                <option value="Uttarakhand">Uttarakhand</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                <option value="Rajasthan">Rajasthan</option>
+                                <option value="Andaman & Nicobar">Andaman & Nicobar</option>
+                            </select>
+                        </div>
+
+                        <!-- Date range -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Start Date</label>
+                                <input type="date" id="plan-start" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 focus:border-gold focus:outline-none rounded-lg text-sm" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">End Date</label>
+                                <input type="date" id="plan-end" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 focus:border-gold focus:outline-none rounded-lg text-sm" required>
+                            </div>
+                        </div>
+
+                        <!-- Budget & Style -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Budget Tier</label>
+                                <select id="plan-budget" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 focus:border-gold focus:outline-none rounded-lg text-sm font-semibold">
+                                    <option value="Low">Low (Backpacker)</option>
+                                    <option value="Medium" selected>Medium (Standard)</option>
+                                    <option value="Luxury">Luxury (Premium)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Travel Style</label>
+                                <select id="plan-style" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 focus:border-gold focus:outline-none rounded-lg text-sm font-semibold">
+                                    <option value="Solo">Solo Explorer</option>
+                                    <option value="Couple" selected>Couple</option>
+                                    <option value="Family">Family / Group</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Notes -->
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Travel Journal & Notes</label>
+                            <textarea id="plan-notes" placeholder="Write any specific plans, hotels, or packing details..." rows="3" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 focus:border-gold focus:outline-none rounded-lg text-sm"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 bg-darkBlue text-white font-black uppercase tracking-widest hover:bg-gold hover:text-darkBlue hover:scale-[1.02] active:scale-95 transition-all duration-300 shadow-md">
+                            ADD TO MY TRAVELS
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Live Map / Quick Tips Info Panel -->
+                <div class="md:col-span-5 bg-gradient-to-br from-gold/5 to-gold/15 p-6 border border-gold/15 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xl font-bold text-darkBlue mb-4 flex items-center gap-2">
+                            <span>🧭</span> Planner Assistant
+                        </h3>
+                        <p class="text-xs text-gray-500 mb-4 leading-relaxed">
+                            Once plans are created, they will persist securely. Tap details next to any planned state to see nearby attractions or local food recommendations instantly.
+                        </p>
+                        
+                        <!-- Weather Advisory Card -->
+                        <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm mt-4">
+                            <span class="text-[9px] font-bold text-orange-500 uppercase tracking-widest block mb-1">Live Climate Warning</span>
+                            <p class="text-xs text-darkBlue font-semibold mb-2">Monsoons are active in Coastal Kerala and Coorg.</p>
+                            <p class="text-[10px] text-gray-400">Bring appropriate gear and watch out for hiking alerts.</p>
+                        </div>
+                    </div>
+
+                    <img src="https://media.istockphoto.com/id/547010832/vector/india-travel.jpg?s=170667a&w=0&k=20&c=7v_Eia6mhWPBAhRo3a-8q05U7yOv3jr5U7tSXD-LYrs=" class="w-40 mx-auto opacity-50 hover:opacity-100 transition-opacity mt-8" alt="Assistance Illustration">
+                </div>
+            </div>
+
+            <!-- List of Saved Plans -->
+            <h2 class="text-2xl font-black text-darkBlue mb-6 flex items-center gap-3">
+                <span>📅</span> Your Scheduled Escapes
+            </h2>
+            <div class="bg-white border border-gray-100 shadow-md rounded-2xl overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 text-[10px] font-black uppercase text-gray-400 tracking-wider border-b border-gray-100">
+                                <th class="p-4">Destination</th>
+                                <th class="p-4">Duration</th>
+                                <th class="p-4">Style</th>
+                                <th class="p-4">Budget</th>
+                                <th class="p-4">Notes</th>
+                                <th class="p-4 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="plans-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ────────────────────────────────────────────────────────── -->
+    <!-- ── TAB: ADMINISTRATOR DASHBOARD (Isolated Key) ── -->
+    <!-- ────────────────────────────────────────────────────────── -->
+    <div id="tab-admin" class="tab-content hidden pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto">
+        <!-- Password gate wrapper -->
+        <div id="admin-gate" class="max-w-md mx-auto py-16 text-center">
+            <div class="w-16 h-16 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center text-3xl mx-auto mb-6 shadow-sm"><i class="fa-solid fa-fingerprint"></i></div>
+            <h1 class="text-3xl font-black text-darkBlue mb-2">Admin Security Gate</h1>
+            <p class="text-xs text-gray-400 uppercase tracking-widest font-black mb-8">Access limited to system engineers</p>
+            
+            <div class="bg-white p-6 border border-gray-150 shadow-xl rounded-2xl text-left">
+                <div class="mb-4">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Secret Password</label>
+                    <input type="password" id="admin-pass-input" placeholder="••••••••••••" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 focus:border-rose-500 focus:outline-none rounded-lg text-sm font-semibold tracking-widest">
+                    <p class="text-[10px] text-gray-400 mt-2"><i class="fa-solid fa-circle-info mr-1"></i> Hint: Use <strong>admin123</strong> to authorize bypass.</p>
+                </div>
+                <button onclick="handleAdminLogin()" class="w-full py-3 bg-rose-500 text-white font-black uppercase tracking-widest hover:bg-rose-600 transition-all rounded-lg text-xs">
+                    AUTHORIZE SYSTEM
+                </button>
+            </div>
+        </div>
+
+        <!-- Actual Admin Dashboard (hidden by default) -->
+        <div id="admin-panel" class="hidden">
+            <!-- Admin Headers -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 border-b border-gray-100 pb-8">
+                <div>
+                    <span class="px-3 py-1 bg-rose-100 text-rose-600 border border-rose-200 text-[10px] font-black uppercase tracking-widest rounded-full inline-block mb-3">Live Platform Core</span>
+                    <h1 class="text-4xl md:text-5xl font-black text-darkBlue">System Administrator</h1>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-right flex items-center gap-4">
+                    <div>
+                        <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest block">Indian Standard Time (IST)</span>
+                        <span class="text-lg font-black text-darkBlue" id="admin-ist-clock">00:00:00 AM</span>
+                    </div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></div>
+                </div>
+            </div>
+
+            <!-- Stats grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Registered Users</h4>
+                    <span class="text-4xl font-black text-darkBlue" id="admin-total-users">6</span>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Database Connection</h4>
+                    <span class="text-lg font-black text-green-500 flex items-center gap-2 mt-2">
+                        <i class="fa-solid fa-circle-nodes"></i> Connected
+                    </span>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Platform Operations</h4>
+                    <span class="text-lg font-black text-darkBlue flex items-center gap-2 mt-2">
+                        <i class="fa-solid fa-check-double text-gold"></i> Health Normal
+                    </span>
+                </div>
+            </div>
+
+            <!-- User Database Table -->
+            <h2 class="text-2xl font-black text-darkBlue mb-6 flex items-center gap-3">
+                <span>👥</span> Registered User Database
+            </h2>
+            <div class="bg-white border border-gray-100 shadow-md rounded-2xl overflow-hidden mb-12">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 text-[10px] font-black uppercase text-gray-400 tracking-wider border-b border-gray-100">
+                            <th class="p-4">Traveler Name</th>
+                            <th class="p-4">Email Address</th>
+                            <th class="p-4">Joined Date</th>
+                            <th class="p-4 text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-users-table">
+                        <!-- Populated by users list in script -->
+                    </tbody>
+                </table>
+            </div>
+
+            <button onclick="handleAdminLogout()" class="px-6 py-3 bg-gray-500 text-white font-bold uppercase tracking-wider text-xs hover:bg-gray-600 transition-all rounded-lg">
+                DEAUTHORIZE SYSTEM
+            </button>
+        </div>
+    </div>
+
+    <!-- ── FOOTER ── -->
+    <footer class="bg-darkBlue text-white border-t border-white/5 py-20 px-6 md:px-12 relative z-10">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 border-b border-white/10 pb-16">
+            <div class="md:col-span-5">
+                <span class="text-2xl font-black tracking-wider text-white">Indian<span class="text-gold">Travel</span></span>
+                <p class="text-white/60 text-sm mt-6 leading-relaxed max-w-sm">
+                    An emotion-driven, AI-powered web application that recommends Indian tourism destinations based on user's emotional mood, current season, budget preferences, and travel style.
+                </p>
+                <div class="flex gap-4 mt-8">
+                    <a href="#" class="w-10 h-10 rounded-full border border-white/15 hover:border-gold hover:text-gold flex items-center justify-center text-sm transition-all"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full border border-white/15 hover:border-gold hover:text-gold flex items-center justify-center text-sm transition-all"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full border border-white/15 hover:border-gold hover:text-gold flex items-center justify-center text-sm transition-all"><i class="fa-brands fa-github"></i></a>
+                </div>
+            </div>
+            
+            <div class="md:col-span-3">
+                <h4 class="text-xs font-bold text-gold uppercase tracking-[0.2em] mb-6">Quick Links</h4>
+                <div class="flex flex-col gap-3.5 text-sm text-white/70">
+                    <a href="#" onclick="switchTab('home')" class="hover:text-gold transition-colors">Home Landing</a>
+                    <a href="#mood-selector" onclick="switchTab('home')" class="hover:text-gold transition-colors">Mood Recommender</a>
+                    <a href="#" onclick="switchTab('dashboard')" class="hover:text-gold transition-colors">Dashboard Profile</a>
+                    <a href="#" onclick="switchTab('planner')" class="hover:text-gold transition-colors">Interactive Planner</a>
+                </div>
+            </div>
+
+            <div class="md:col-span-4">
+                <h4 class="text-xs font-bold text-gold uppercase tracking-[0.2em] mb-6">Explore India</h4>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1 border border-white/10 text-xs text-white/60 hover:border-gold hover:text-gold transition-all duration-300">Taj Mahal</span>
+                    <span class="px-3 py-1 border border-white/10 text-xs text-white/60 hover:border-gold hover:text-gold transition-all duration-300">Varanasi</span>
+                    <span class="px-3 py-1 border border-white/10 text-xs text-white/60 hover:border-gold hover:text-gold transition-all duration-300">Munnar</span>
+                    <span class="px-3 py-1 border border-white/10 text-xs text-white/60 hover:border-gold hover:text-gold transition-all duration-300">Goa Beaches</span>
+                    <span class="px-3 py-1 border border-white/10 text-xs text-white/60 hover:border-gold hover:text-gold transition-all duration-300">Manali Valley</span>
+                    <span class="px-3 py-1 border border-white/10 text-xs text-white/60 hover:border-gold hover:text-gold transition-all duration-300">Alleppey</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto pt-10 flex flex-col sm:flex-row justify-between items-center text-xs text-white/40 gap-4">
+            <span>&copy; 2026 IndianTravel Platform. Made with ❤️ to explore incredible India!</span>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ────────────────────────────────────────────────────────── -->
+    <!-- ── AUTHENTICATION MODAL (Login / Signup) ── -->
+    <!-- ────────────────────────────────────────────────────────── -->
+    <div id="auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <!-- Backdrop Blur -->
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm cursor-pointer" onclick="closeAuthModal()"></div>
+        
+        <!-- Modal panel -->
+        <div class="relative w-full max-w-md bg-white rounded-3xl shadow-2xl z-10 overflow-hidden border border-gray-100">
+            <!-- Header/Tabs -->
+            <div class="flex border-b border-gray-100 font-bold text-center">
+                <button onclick="toggleAuthTab('login')" id="auth-tab-login" class="w-1/2 py-4 text-darkBlue border-b-2 border-gold text-sm">LOGIN</button>
+                <button onclick="toggleAuthTab('signup')" id="auth-tab-signup" class="w-1/2 py-4 text-gray-400 border-b-2 border-transparent text-sm">REGISTER</button>
+            </div>
+
+            <!-- Modal Content Inner -->
+            <div class="p-8">
+                <!-- FORM: Login -->
+                <form id="form-login" onsubmit="handleAuthSubmit(event, 'login')" class="space-y-4">
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Email Address</label>
+                        <input type="email" id="login-email" placeholder="example@indiantravel.com" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 focus:border-gold focus:outline-none rounded-lg text-sm" required>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Password</label>
+                        <input type="password" id="login-pass" placeholder="••••••••••••" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 focus:border-gold focus:outline-none rounded-lg text-sm" required>
+                    </div>
+                    
+                    <button type="submit" class="w-full py-4 bg-darkBlue text-white font-black tracking-widest hover:bg-gold hover:text-darkBlue transition-all text-xs uppercase">
+                        SIGN IN NOW
+                    </button>
+                    
+                    <div class="text-center pt-4 border-t border-gray-100">
+                        <span class="text-[10px] text-gray-400 uppercase tracking-widest block mb-3">Or Connect With</span>
+                        <button type="button" onclick="triggerGoogleAuth()" class="w-full py-3 border border-gray-200 text-gray-600 font-bold text-xs hover:bg-gray-50 transition-all flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-google text-red-500"></i> GOOGLE SINGLE SIGN-ON
+                        </button>
+                    </div>
+                </form>
+
+                <!-- FORM: Register -->
+                <form id="form-signup" onsubmit="handleAuthSubmit(event, 'signup')" class="hidden space-y-4">
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Traveler Full Name</label>
+                        <input type="text" id="signup-name" placeholder="Rohan Sharma" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 focus:border-gold focus:outline-none rounded-lg text-sm" required>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Email Address</label>
+                        <input type="email" id="signup-email" placeholder="example@indiantravel.com" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 focus:border-gold focus:outline-none rounded-lg text-sm" required>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Create Secure Password</label>
+                        <input type="password" id="signup-pass" placeholder="••••••••••••" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 focus:border-gold focus:outline-none rounded-lg text-sm" required>
+                    </div>
+                    
+                    <button type="submit" class="w-full py-4 bg-darkBlue text-white font-black tracking-widest hover:bg-gold hover:text-darkBlue transition-all text-xs uppercase">
+                        CREATE ACCOUNT
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ────────────────────────────────────────────────────────── -->
+    <!-- ── DETAILED DESTINATION MODAL (3-Day Itinerary & Food) ── -->
+    <!-- ────────────────────────────────────────────────────────── -->
+    <div id="details-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <!-- Backdrop Blur -->
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm cursor-pointer" onclick="closeDetailsModal()"></div>
+        
+        <!-- Modal panel -->
+        <div class="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl z-10 max-h-[90vh] overflow-y-auto overflow-x-hidden border border-gray-100 custom-scrollbar">
+            <!-- Hero Image Banner in Modal -->
+            <div class="relative h-[250px] md:h-[350px] w-full">
+                <img id="modal-hero-img" src="" alt="Destination Image" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-black/40"></div>
+                <button onclick="closeDetailsModal()" class="absolute top-6 right-6 w-10 h-10 bg-white hover:bg-gray-100 text-darkBlue rounded-full flex items-center justify-center font-bold shadow-md transition-colors z-20">
+                    ✕
+                </button>
+                
+                <div class="absolute bottom-6 left-6 md:left-10 text-darkBlue md:text-white z-10">
+                    <span id="modal-badge-region" class="px-3 py-1 bg-gold text-darkBlue text-[10px] font-black uppercase tracking-widest rounded-full shadow-sm">Agra, UP</span>
+                    <h2 id="modal-destination-title" class="text-3xl md:text-5xl font-black mt-3">Taj Mahal</h2>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-6 md:p-10 text-darkBlue">
+                
+                <!-- Description Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 border-b border-gray-100 pb-8">
+                    <div class="lg:col-span-8 space-y-6">
+                        <h3 class="text-xl font-bold text-darkBlue">Overview</h3>
+                        <p id="modal-long-desc" class="text-gray-500 leading-relaxed text-sm md:text-base">
+                            Detailed information about this breathtaking spot.
+                        </p>
+
+                        <!-- Key Highlights tags -->
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-2">Highlights</span>
+                            <div class="flex flex-wrap gap-2" id="modal-highlights-container">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Meta specs side block -->
+                    <div class="lg:col-span-4 bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-4">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-bold text-gray-400 uppercase tracking-widest">Safety Rating</span>
+                            <span id="modal-safety" class="text-gold font-bold">⭐⭐⭐⭐</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-bold text-gray-400 uppercase tracking-widest">Eco Score</span>
+                            <span id="modal-sustain" class="text-emerald-500 font-bold">⭐⭐⭐</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-bold text-gray-400 uppercase tracking-widest">Languages</span>
+                            <span id="modal-languages" class="font-semibold text-right">Hindi, English</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-bold text-gray-400 uppercase tracking-widest">Visit Season</span>
+                            <span id="modal-best-season" class="font-bold text-darkBlue">Winter</span>
+                        </div>
+                        <button id="modal-btn-bookmark" onclick="toggleBookmarkModal()" class="w-full py-3 border border-darkBlue hover:bg-darkBlue hover:text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2">
+                            <i class="fa-regular fa-heart"></i> Save Escape
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3-Day Itinerary Block -->
+                <div class="py-8 border-b border-gray-100">
+                    <h3 class="text-xl font-bold text-darkBlue mb-6 flex items-center gap-2">
+                        <span>📅</span> 3-Day Suggested Itinerary
+                    </h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 h-8 rounded-full bg-gold/20 text-gold flex items-center justify-center text-xs font-black">01</div>
+                                <div class="w-0.5 h-full bg-gray-100 my-1"></div>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-darkBlue uppercase">Day 1: Arrival & Core Attractions</h4>
+                                <p id="modal-itinerary-d1" class="text-xs text-gray-500 mt-1 leading-relaxed">...</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 h-8 rounded-full bg-gold/20 text-gold flex items-center justify-center text-xs font-black">02</div>
+                                <div class="w-0.5 h-full bg-gray-100 my-1"></div>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-darkBlue uppercase">Day 2: Exploration & Nature</h4>
+                                <p id="modal-itinerary-d2" class="text-xs text-gray-500 mt-1 leading-relaxed">...</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex flex-col">
+                                <div class="w-8 h-8 rounded-full bg-gold/20 text-gold flex items-center justify-center text-xs font-black">03</div>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-darkBlue uppercase">Day 3: Local Culture & Departure</h4>
+                                <p id="modal-itinerary-d3" class="text-xs text-gray-500 mt-1 leading-relaxed">...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Local Foods Block -->
+                <div class="py-8 border-b border-gray-100">
+                    <h3 class="text-xl font-bold text-darkBlue mb-6 flex items-center gap-2">
+                        <span>🍛</span> Culinary Recommendations
+                    </h3>
+                    
+                    <div id="modal-foods-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Weather and Travel Tips Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 py-8">
+                    <!-- Weather -->
+                    <div class="space-y-4">
+                        <h4 class="font-bold text-darkBlue flex items-center gap-2"><i class="fa-solid fa-cloud-sun text-gold"></i> Seasonal Weather</h4>
+                        <div class="space-y-2 text-xs" id="modal-weather-info">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Travel Tips -->
+                    <div class="space-y-4">
+                        <h4 class="font-bold text-darkBlue flex items-center gap-2"><i class="fa-solid fa-circle-exclamation text-rose-500"></i> Essential Travel Tips</h4>
+                        <ul id="modal-travel-tips" class="list-disc list-inside space-y-1.5 text-xs text-gray-500">
+                            <!-- Populated by JS -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Map Button -->
+                <div class="pt-6 border-t border-gray-100 flex justify-end">
+                    <a id="modal-maps-link" href="#" target="_blank" class="px-6 py-3 bg-darkBlue text-white font-bold text-xs uppercase tracking-widest hover:bg-gold hover:text-darkBlue transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-map-pin"></i> View Google Maps
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ── LEARN MORE GENERAL MODAL ── -->
+    <div id="learn-more-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <!-- Backdrop Blur -->
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm cursor-pointer" onclick="closeLearnMoreModal()"></div>
+        
+        <!-- Modal panel -->
+        <div class="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl z-10 max-h-[85vh] overflow-y-auto p-8 md:p-12 custom-scrollbar">
+            <button onclick="closeLearnMoreModal()" class="absolute top-6 right-6 w-10 h-10 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full flex items-center justify-center font-bold transition-colors z-20">
+                ✕
+            </button>
+
+            <div class="space-y-8">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl md:text-4xl font-black mb-4">🌏 Discover India Beyond Destinations</h2>
+                    <div class="w-16 h-1 bg-gold mx-auto rounded-full"></div>
+                </div>
+
+                <p class="text-base md:text-lg leading-relaxed text-gray-600 font-medium">
+                    Step into a land where every corner tells a story. India is not just a place to visit — it’s an experience woven with centuries of history, diverse traditions, vibrant festivals, and breathtaking landscapes.
+                </p>
+                <p class="text-base text-gray-500 leading-relaxed">
+                    From the snow-covered peaks of the Himalayas to the serene backwaters of Kerala, every region carries its own identity, language, cuisine, and cultural essence. As you explore through our AI-powered platform, you’re not just finding places — you’re uncovering the soul of India.
+                </p>
+
+                <div class="bg-blue-50/50 p-6 rounded-2xl border border-blue-100/50">
+                    <h3 class="text-xl font-bold mb-3 text-blue-900 flex items-center gap-2">
+                        🧭 Travel with Meaning
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-4">
+                        Our intelligent recommendation system goes beyond generic travel suggestions. It understands your mood, preferences, and travel style, guiding you to destinations that truly resonate with your emotions.
+                    </p>
+                    <ul class="space-y-2 text-xs font-semibold text-gray-700">
+                        <li class="flex gap-2"><span class="text-blue-500">Feeling peaceful?</span> Discover tranquil monasteries and hidden valleys.</li>
+                        <li class="flex gap-2"><span class="text-indigo-500">Seeking adventure?</span> Explore mountains, forests, and untouched trails.</li>
+                        <li class="flex gap-2"><span class="text-purple-500">Looking for spirituality?</span> Visit sacred temples and ancient pilgrimage sites.</li>
+                    </ul>
+                </div>
+
+                <div class="border-t border-gray-100 pt-8 mt-8 text-center">
+                    <button onclick="closeLearnMoreModal(); document.getElementById('mood-selector')?.scrollIntoView({behavior: 'smooth'})" class="px-8 py-3.5 bg-gold text-darkBlue font-black rounded-full shadow-lg">
+                        I'M READY TO EXPLORE
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ────────────────────────────────────────────────────────── -->
+    <!-- ── CORE REACTIVE JAVASCRIPT STATE ENGINE ── -->
+    <!-- ────────────────────────────────────────────────────────── -->
+    <script>
+        // ── 1. GLOBAL STATE DATA MOCK ──
+        const MOODS_DATA = {
+            Happy: {
+                color: 'from-yellow-400 to-amber-400',
+                themeColor: '#efba6c',
+                description: 'Joyful and content',
+                explanation: 'Goa, Punjab, West Bengal, and Gujarat represent happiness through their vibrant culture, energetic lifestyle, and strong social interactions. Goa’s beaches, Punjab’s festive spirit, West Bengal’s artistic depth, and Gujarat’s colorful traditions create an atmosphere filled with celebration and lively experiences that naturally uplift mood.',
+                benefits: ['Vibrant Culture', 'Carefree Lifestyle', 'Community Bonding'],
+                imgUrl: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=300'
+            },
+            Sad: {
+                color: 'from-blue-400 to-cyan-400',
+                themeColor: '#60a5fa',
+                description: 'Melancholic mood',
+                explanation: 'Himachal Pradesh, Kerala, Sikkim, Bihar, Jharkhand, and Chhattisgarh are ideal for sadness because of their peaceful surroundings and slow-paced lifestyle. From the silent mountains of the north to the green heartlands of the east, these states provide space for reflection and emotional balance.',
+                benefits: ['Peaceful Silence', 'Space for Reflection', 'Emotional Balance'],
+                imgUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=300'
+            },
+            Lonely: {
+                color: 'from-purple-400 to-violet-400',
+                themeColor: '#c084fc',
+                description: 'Seeking connection',
+                explanation: 'Andaman & Nicobar Islands, Meghalaya, Uttarakhand, Manipur, and Tripura offer solitude and quiet environments that suit moments of loneliness. Their isolated locations, peaceful landscapes, and minimal crowd allow individuals to disconnect from distractions and reflect deeply.',
+                benefits: ['Quiet Solitude', 'Self-Connection', 'Meaningful Reflection'],
+                imgUrl: 'https://images.unsplash.com/photo-1589330273594-fade1ee91647?w=300'
+            },
+            Romantic: {
+                color: 'from-pink-400 to-rose-400',
+                themeColor: '#f43f5e',
+                description: 'Love and affection',
+                explanation: 'Goa, Jammu & Kashmir, and Rajasthan are associated with romance due to their scenic beauty and unique ambiance. Goa offers relaxed beachside experiences, Jammu & Kashmir provides breathtaking natural views, and Rajasthan adds a royal and elegant touch with its heritage locations.',
+                benefits: ['Scenic Ambiance', 'Heritage Locations', 'Intimate Experiences'],
+                imgUrl: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=300'
+            },
+            Adventurous: {
+                color: 'from-red-500 to-orange-500',
+                themeColor: '#f97316',
+                description: 'Wild and excited',
+                explanation: 'Uttarakhand, Himachal Pradesh, Meghalaya, Nagaland, and Mizoram are known for adventure because of their challenging terrains and outdoor activities. From trekking in the Himalayas to exploring caves, waterfalls, and tribal trails, these regions provide thrilling experiences.',
+                benefits: ['Challenging Terrains', 'Thrilling Activities', 'Raw Environments'],
+                imgUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300'
+            },
+            Stressed: {
+                color: 'from-slate-500 to-gray-600',
+                themeColor: '#64748b',
+                description: 'Need relaxation',
+                explanation: 'Kerala, Tamil Nadu, Himachal Pradesh, and Madhya Pradesh are ideal for stress relief due to their calm environments and natural surroundings. Mountains, greenery, and water bodies help reduce mental pressure, while the slow pace of life allows relaxation.',
+                benefits: ['Mental Clarity', 'Slow Pace of Life', 'Emotional Recovery'],
+                imgUrl: 'https://images.unsplash.com/photo-1576502200916-3808e07386a5?w=300'
+            },
+            Calm: {
+                color: 'from-green-400 to-emerald-500',
+                themeColor: '#10b981',
+                description: 'Peaceful and zen',
+                explanation: 'Arunachal Pradesh, Kerala, Sikkim, and Assam promote calmness through their natural beauty, simplicity, and lack of urban disturbance. Untouched landscapes, relaxing backwaters, and misty tea gardens create a setting where both mind and body can unwind.',
+                benefits: ['Natural Beauty', 'Mental Relaxation', 'Deep Peace'],
+                imgUrl: 'https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=300'
+            },
+            Excited: {
+                color: 'from-amber-400 to-yellow-400',
+                themeColor: '#f59e0b',
+                description: 'Full of energy',
+                explanation: 'Delhi, Maharashtra, Telangana, Karnataka, and Andhra Pradesh reflect excitement through their fast-paced lifestyle and constant activity. Bustling cities, nightlife, modern infrastructure, and cultural diversity create a dynamic environment.',
+                benefits: ['Dynamic Energy', 'Modern Infrastructure', 'Infinite Movement'],
+                imgUrl: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=300'
+            },
+            Spiritual: {
+                color: 'from-orange-400 to-amber-500',
+                themeColor: '#f97316',
+                description: 'Inner peace seeking',
+                explanation: 'Tamil Nadu, Uttar Pradesh, Uttarakhand, and Haryana are spiritual centers known for their temples, rituals, and religious significance. These states offer strong cultural traditions and sacred environments that encourage devotion and inner connection.',
+                benefits: ['Ancient Traditions', 'Sacred Environments', 'Inner Connection'],
+                imgUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300'
+            }
+        };
+
+        const DESTINATIONS_DATA = [
+            {
+                id: 1,
+                name: 'Goa',
+                state: 'Goa',
+                region: 'Western Coast',
+                landscape: ['Beach', 'City'],
+                season: ['Winter', 'Summer'],
+                moodMatch: ['Happy', 'Romantic', 'Adventurous', 'Excited'],
+                description: 'Tropical beaches with Portuguese heritage and vibrant nightlife',
+                longDescription: 'Goa is a beautiful beach destination known for its golden sand beaches, Portuguese architecture, churches, and vibrant nightlife. It is one of the most popular tourist destinations in India.',
+                heroImage: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600',
+                bestTimeToVisit: 'October to February',
+                rating: 4.5,
+                safetyRating: 4,
+                sustainabilityScore: 3,
+                localLanguages: 'Konkani, Marathi, English',
+                itinerary: {
+                    day1: 'North Goa beaches (Baga, Calangute), water sports, sunset beach parties',
+                    day2: 'Portuguese churches (Basilica of Bom Jesus, Se Cathedral), Old Goa exploration',
+                    day3: 'South Goa beaches (Palolem), spice plantations, dolphin watching',
+                },
+                localFood: [
+                    { name: 'Fish Curry Rice', description: 'Traditional Goan dish with coconut' },
+                    { name: 'Vindaloo', description: 'Spicy pork or chicken curry' },
+                    { name: 'Feni', description: 'Local spirit drink' },
+                ],
+                weatherInfo: {
+                    summer: 'Very hot and humid, 28-32°C',
+                    monsoon: 'Heavy rainfall, 24-26°C',
+                    winter: 'Pleasant, 20-28°C, best time to visit',
+                    spring: 'Hot and humid, 26-32°C',
+                },
+                travelTips: [
+                    'Book accommodations in advance during peak season',
+                    'Use scooters for local transportation',
+                    'Respect beach safety warnings',
+                ],
+                mapsUrl: 'https://maps.google.com/maps?q=goa',
+                coords: { lat: 15.49, lon: 73.82 }
+            },
+            {
+                id: 2,
+                name: 'Andaman & Nicobar Islands',
+                state: 'Andaman & Nicobar',
+                region: 'Bay of Bengal',
+                landscape: ['Beach'],
+                season: ['Winter', 'Spring'],
+                moodMatch: ['Happy', 'Adventurous', 'Romantic', 'Lonely'],
+                description: 'Pristine tropical islands with crystal clear waters and diverse marine life',
+                longDescription: 'The Andaman & Nicobar Islands are a group of islands in the Bay of Bengal with pristine beaches, crystal clear waters, and unique marine biodiversity. Perfect for water sports and relaxation.',
+                heroImage: 'https://images.unsplash.com/photo-1589330273594-fade1ee91647?w=600',
+                bestTimeToVisit: 'October to March',
+                rating: 4.8,
+                safetyRating: 4,
+                sustainabilityScore: 4,
+                localLanguages: 'Hindi, English, Bengali',
+                itinerary: {
+                    day1: 'Port Blair - Cellular Jail, Light & Sound Show, Corbyn Cove Beach',
+                    day2: 'Havelock Island - Radhanagar Beach, snorkeling, diving',
+                    day3: 'Neil Island - Natural Bridge, scuba diving, Bharatpur Beach',
+                },
+                localFood: [
+                    { name: 'Fresh Seafood', description: 'Caught daily from local waters' },
+                    { name: 'Coconut-based dishes', description: 'Local specialty' },
+                    { name: 'Tropical Fruits', description: 'Sweet and fresh' },
+                ],
+                weatherInfo: {
+                    summer: 'Humid and hot, 26-33°C',
+                    monsoon: 'Heavy storms, not recommended',
+                    winter: 'Perfect, 22-28°C',
+                    spring: 'Good, 24-30°C',
+                },
+                travelTips: [
+                    'Book island tours and ferry schedules in advance',
+                    'Bring reef-safe sunscreen',
+                    'Respect marine life',
+                ],
+                mapsUrl: 'https://maps.google.com/maps?q=andaman',
+                coords: { lat: 11.74, lon: 92.65 }
+            },
+            {
+                id: 3,
+                name: 'Gokarna',
+                state: 'Karnataka',
+                region: 'Western Coast',
+                landscape: ['Beach'],
+                season: ['Winter', 'Spring'],
+                moodMatch: ['Calm', 'Spiritual', 'Adventurous'],
+                description: 'Serene beach town with spiritual significance and bohemian vibes',
+                longDescription: 'Gokarna is a lesser-known beach destination with pristine beaches, spiritual temples, and a laid-back bohemian atmosphere. Perfect for those seeking peace and adventure.',
+                heroImage: 'https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=600',
+                bestTimeToVisit: 'October to February',
+                rating: 4.6,
+                safetyRating: 4,
+                sustainabilityScore: 4,
+                localLanguages: 'Kannada, Konkani, English',
+                itinerary: {
+                    day1: 'Mahabaleshwar Temple, Main Beach, sunset walk at Kudle',
+                    day2: 'Beach trek from Kudle to Om Beach, camping near the sea',
+                    day3: 'Half Moon Beach, Paradise Beach hike, dolphin spotting',
+                },
+                localFood: [
+                    { name: 'Coastal Cuisine', description: 'Fresh fish and prawns curry' },
+                    { name: 'Bamboo Rice Dishes', description: 'Local tribal specialty' },
+                    { name: 'Lassi', description: 'Creamy yogurt drink' },
+                ],
+                weatherInfo: {
+                    summer: 'Hot and humid, 28-34°C',
+                    monsoon: 'Heavy rainfall, lush landscapes',
+                    winter: 'Perfect, 20-26°C',
+                    spring: 'Good, 23-28°C',
+                },
+                travelTips: [
+                    'Carry cash in town as ATMs are limited',
+                    'Wear proper shoes for beach cliff hiking',
+                    'Be respectful of local temples and rituals',
+                ],
+                mapsUrl: 'https://maps.google.com/maps?q=gokarna',
+                coords: { lat: 14.55, lon: 74.31 }
+            },
+            {
+                id: 4,
+                name: 'Manali',
+                state: 'Himachal Pradesh',
+                region: 'Western Himalayas',
+                landscape: ['Mountains', 'Hill Station'],
+                season: ['Summer', 'Winter'],
+                moodMatch: ['Adventurous', 'Excited', 'Calm', 'Romantic', 'Stressed', 'Sad'],
+                description: 'Adventure capital with snow-capped peaks and thrilling activities',
+                longDescription: 'Manali is a popular hill station offering adventure sports, trekking, paragliding, and scenic mountain views. Known for its beautiful valleys and outdoor activities.',
+                heroImage: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600',
+                bestTimeToVisit: 'December to February (snow) or June to July',
+                rating: 4.7,
+                safetyRating: 4,
+                sustainabilityScore: 3,
+                localLanguages: 'Hindi, Himachali, English',
+                itinerary: {
+                    day1: 'Solang Valley, paragliding, old Manali bazaar, local temples',
+                    day2: 'Rohtang Pass excursion, snow activities and majestic glacier views',
+                    day3: 'Beas River rafting, hot springs visit at Vashisht',
+                },
+                localFood: [
+                    { name: 'Himachali Thali', description: 'Traditional mountain meal' },
+                    { name: 'Siddu', description: 'Steamed wheat flour bread stuffed with poppy seeds' },
+                    { name: 'Trout Fish', description: 'Freshly caught river trout' },
+                ],
+                weatherInfo: {
+                    summer: 'Pleasant, 10-20°C',
+                    monsoon: 'Heavy rain, risk of landslides',
+                    winter: 'Freezing, snow-clad, 0-10°C',
+                    spring: 'Cold, 5-15°C',
+                },
+                travelTips: [
+                    'Carry warm clothing even in summer',
+                    'Get Rohtang pass permits in advance',
+                    'Be prepared for road delays during winter snowfall',
+                ],
+                mapsUrl: 'https://maps.google.com/maps?q=manali',
+                coords: { lat: 32.23, lon: 77.18 }
+            },
+            {
+                id: 5,
+                name: 'Munnar',
+                state: 'Kerala',
+                region: 'Western Ghats',
+                landscape: ['Hill Station', 'Forest'],
+                season: ['Monsoon', 'Winter'],
+                moodMatch: ['Calm', 'Romantic', 'Spiritual', 'Stressed', 'Sad'],
+                description: 'Tea garden paradise with misty mountains and romantic ambiance',
+                longDescription: 'Munnar is a beautiful hill station in Kerala known for its endless tea gardens, misty mountains, and cool climate. Perfect for couples and those seeking peace.',
+                heroImage: 'https://images.unsplash.com/photo-1576502200916-3808e07386a5?w=600',
+                bestTimeToVisit: 'August to January',
+                rating: 4.7,
+                safetyRating: 4,
+                sustainabilityScore: 4,
+                localLanguages: 'Malayalam, Tamil, English',
+                itinerary: {
+                    day1: 'Tea plantations tour, tea factory visit, tasting fresh estate blends',
+                    day2: 'Eravikulam National Park to spot Nilgiri Tahr, Mattupetti Dam boat ride',
+                    day3: 'Kundala Lake, Top Station viewpoint for breathtaking cloud beds',
+                },
+                localFood: [
+                    { name: 'Appam with Stew', description: 'Lacy rice pancakes with coconut milk curry' },
+                    { name: 'Kerala Banana Fritters', description: 'Sweet fried banana snack' },
+                    { name: 'Local Estate Tea', description: 'Aromatic loose leaf black tea' },
+                ],
+                weatherInfo: {
+                    summer: 'Cool and pleasant, 15-25°C',
+                    monsoon: 'Lush green and misty, 15-20°C',
+                    winter: 'Chilly nights, 12-22°C',
+                    spring: 'Warm, 18-28°C',
+                },
+                travelTips: [
+                    'Book resort stays early for monsoon peak bloom periods',
+                    'Hire a local jeep to explore offroad tea trails',
+                    'Carry umbrella and mosquito repellent',
+                ],
+                mapsUrl: 'https://maps.google.com/maps?q=munnar',
+                coords: { lat: 10.58, lon: 76.87 }
+            },
+            {
+                id: 6,
+                name: 'Varanasi',
+                state: 'Uttar Pradesh',
+                region: 'Northern Plains',
+                landscape: ['City'],
+                season: ['Winter', 'Spring'],
+                moodMatch: ['Spiritual', 'Calm', 'Lonely', 'Sad'],
+                description: 'Holiest city in Hinduism with ancient temples, ghats, and spiritual energy',
+                longDescription: 'Varanasi is one of the oldest and holiest cities in India, famous for its sacred Ganges ghats, ancient temples, and spiritual atmosphere. A must-visit for spirituality seekers.',
+                heroImage: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600',
+                bestTimeToVisit: 'October to February',
+                rating: 4.5,
+                safetyRating: 3,
+                sustainabilityScore: 2,
+                localLanguages: 'Hindi, English, Sanskrit',
+                itinerary: {
+                    day1: 'Ghat walk, evening Ganga Aarti ceremony at Dashashwamedh Ghat, boat cruise',
+                    day2: 'Sunrise boat ride, Kashi Vishwanath temple, narrow alleys street food tour',
+                    day3: 'Sarnath excursion (Buddhist pilgrimage site), archaeological museum visit',
+                },
+                localFood: [
+                    { name: 'Kachori Sabzi', description: 'Spicy fried breakfast' },
+                    { name: 'Banarasi Lassi', description: 'Thick sweet yogurt with malai' },
+                    { name: 'Banarasi Paan', description: 'Stuffed betel leaf mouth freshener' },
+                ],
+                weatherInfo: {
+                    summer: 'Extremely hot, 32-42°C',
+                    monsoon: 'Humid and rainy, 28-35°C',
+                    winter: 'Pleasant and foggy, 12-25°C',
+                    spring: 'Warm, 25-35°C',
+                },
+                travelTips: [
+                    'Dress conservatively at holy sites',
+                    'Be cautious of scam guides around main ghats',
+                    'Wake up early (5:00 AM) to experience sunrise on the Ganges',
+                ],
+                mapsUrl: 'https://maps.google.com/maps?q=varanasi',
+                coords: { lat: 25.31, lon: 82.97 }
+            },
+            {
+                id: 7,
+                name: 'Jaisalmer',
+                state: 'Rajasthan',
+                region: 'Thar Desert',
+                landscape: ['Desert', 'City'],
+                season: ['Winter', 'Fall'],
+                moodMatch: ['Adventurous', 'Romantic', 'Excited', 'Happy'],
+                description: 'Golden city with desert safaris, ancient forts, and Rajasthani culture',
+                longDescription: 'Jaisalmer is a city in the heart of the Thar Desert, known for its golden stone architecture, magnificent fort, camel safaris, and rich Rajasthani heritage.',
+                heroImage: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600',
+                bestTimeToVisit: 'October to March',
+                rating: 4.6,
+                safetyRating: 4,
+                sustainabilityScore: 3,
+                localLanguages: 'Hindi, Rajasthani, English',
+                itinerary: {
+                    day1: 'Jaisalmer Fort (living fort) tour, Patwon ki Haveli, local bazaars',
+                    day2: 'Desert camel safari, sand dune dunes, overnight camp with folklore music',
+                    day3: 'Kuldhara ghost village tour, Gadsisar Lake boating',
+                },
+                localFood: [
+                    { name: 'Dal Baati Churma', description: 'Lentils with baked wheat balls and sweet crumbs' },
+                    { name: 'Ker Sangri', description: 'Local desert berry and bean preparation' },
+                    { name: 'Bajra Roti with Ghee', description: 'Millet flatbread with butter' },
+                ],
+                weatherInfo: {
+                    summer: 'Scorchingly hot, 35-46°C',
+                    monsoon: 'Very dry, sparse rains, 28-36°C',
+                    winter: 'Cold nights, warm sunny days, 15-28°C',
+                    spring: 'Pleasant, 20-30°C',
+                },
+                travelTips: [
+                    'Overnight desert camping is highly recommended',
+                    'Bring moisturizing cream and sunscreen for the desert winds',
+                    'Book historical haveli hotels for genuine heritage stay',
+                ],
+                mapsUrl: 'https://maps.google.com/maps?q=jaisalmer',
+                coords: { lat: 26.91, lon: 70.90 }
+            }
+        ];
+
+        // ── 2. STATE MANAGER ──
+        let activeTab = 'home';
+        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+        let selectedMood = null;
+        let selectedSeason = 'Winter'; // default
+        let userPlans = JSON.parse(localStorage.getItem('userPlans')) || [
+            { state: 'Goa', start: '2026-06-15', end: '2026-06-18', budget: 'Medium', style: 'Couple', notes: 'Anniversary celebration!' },
+            { state: 'Kerala', start: '2026-08-10', end: '2026-08-14', budget: 'Luxury', style: 'Family', notes: 'Backwater cruise tour.' }
+        ];
+        let mockedUsers = JSON.parse(localStorage.getItem('mockedUsers')) || [
+            { name: 'Rohan Sharma', email: 'rohan@travel.com', joined: '2026-01-10' },
+            { name: 'Aditi Patel', email: 'aditi@india.org', joined: '2026-02-14' },
+            { name: 'Devendra Singh', email: 'dev@heritage.in', joined: '2026-03-20' },
+            { name: 'Elena Rostova', email: 'elena@explorer.com', joined: '2026-04-05' },
+            { name: 'Govind Naik', email: 'govind@naik.me', joined: '2026-05-18' }
+        ];
+
+        // Ensure current state syncs to LocalStorage
+        function saveState() {
+            localStorage.setItem('userPlans', JSON.stringify(userPlans));
+            localStorage.setItem('mockedUsers', JSON.stringify(mockedUsers));
+            if (currentUser) {
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            } else {
+                localStorage.removeItem('currentUser');
+            }
+        }
+
+        // ── 3. PAGE INITIALIZATION ──
+        window.addEventListener('DOMContentLoaded', () => {
+            setSeason(selectedSeason);
+            updateAuthUI();
+            renderRecommendations();
+            renderPlans();
+            renderUsers();
+            initGlobe();
+            initSeasonParticles();
+            
+            // IST Clock Loop
+            setInterval(() => {
+                const now = new Date();
+                // Format to IST
+                const options = { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+                const istString = now.toLocaleTimeString('en-US', options);
+                document.getElementById('admin-ist-clock').innerText = istString;
+            }, 1000);
+        });
+
+        // Tab Switcher
+        function switchTab(tabId) {
+            // Check authorization rules
+            if ((tabId === 'dashboard' || tabId === 'planner') && !currentUser) {
+                alert("This area is protected. Please log in or create a temporary account first!");
+                openAuthModal('login');
+                return;
+            }
+
+            activeTab = tabId;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            // Update Nav indicators
+            document.querySelectorAll('.nav-indicator').forEach(el => el.classList.remove('active'));
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) activeNav.classList.add('active');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toggle Mobile Menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('mobile-menu-icon');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                menu.classList.add('flex');
+                icon.className = "fa-solid fa-xmark";
+            } else {
+                menu.classList.add('hidden');
+                menu.classList.remove('flex');
+                icon.className = "fa-solid fa-bars";
+            }
+        }
+
+        // ── 4. CUSTOM VISUAL ENGINE: SEASON PARTICLES ──
+        let particleInterval = null;
+        function initSeasonParticles() {
+            const canvas = document.getElementById('season-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            let particles = [];
+            
+            // Animation Loop
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Set parameters depending on current active season
+                if (selectedSeason === 'Winter') {
+                    // SNOW particles
+                    if (particles.length < 80 && Math.random() < 0.2) {
+                        particles.push({
+                            x: Math.random() * canvas.width,
+                            y: -10,
+                            size: Math.random() * 3 + 1,
+                            speedY: Math.random() * 1.5 + 0.5,
+                            speedX: Math.random() * 1 - 0.5,
+                            opacity: Math.random() * 0.7 + 0.3
+                        });
+                    }
+                    particles.forEach((p, idx) => {
+                        p.y += p.speedY;
+                        p.x += p.speedX;
+                        ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        ctx.fill();
+                        
+                        if (p.y > canvas.height) particles.splice(idx, 1);
+                    });
+                } else if (selectedSeason === 'Monsoon') {
+                    // RAIN particles
+                    if (particles.length < 150 && Math.random() < 0.6) {
+                        particles.push({
+                            x: Math.random() * canvas.width,
+                            y: -20,
+                            len: Math.random() * 20 + 10,
+                            speedY: Math.random() * 12 + 8,
+                            speedX: -2,
+                            opacity: Math.random() * 0.2 + 0.1
+                        });
+                    }
+                    particles.forEach((p, idx) => {
+                        p.y += p.speedY;
+                        p.x += p.speedX;
+                        ctx.strokeStyle = `rgba(156, 163, 175, ${p.opacity})`;
+                        ctx.lineWidth = 1.5;
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p.x + p.speedX * 0.8, p.y + p.len);
+                        ctx.stroke();
+                        
+                        if (p.y > canvas.height) particles.splice(idx, 1);
+                    });
+                } else if (selectedSeason === 'Spring') {
+                    // SAKURA / FLOWER petal particles
+                    if (particles.length < 40 && Math.random() < 0.08) {
+                        particles.push({
+                            x: Math.random() * canvas.width,
+                            y: -20,
+                            size: Math.random() * 6 + 4,
+                            speedY: Math.random() * 1 + 1,
+                            speedX: Math.random() * 2 - 0.5,
+                            rot: Math.random() * 360,
+                            rotSpeed: Math.random() * 2 - 1,
+                            opacity: Math.random() * 0.6 + 0.4
+                        });
+                    }
+                    particles.forEach((p, idx) => {
+                        p.y += p.speedY;
+                        p.x += p.speedX;
+                        p.rot += p.rotSpeed;
+                        ctx.save();
+                        ctx.translate(p.x, p.y);
+                        ctx.rotate(p.rot * Math.PI / 180);
+                        ctx.fillStyle = `rgba(244, 63, 94, ${p.opacity})`; // pink petals
+                        ctx.beginPath();
+                        // Draw a simple petal shape
+                        ctx.ellipse(0, 0, p.size, p.size / 2, 0, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.restore();
+                        
+                        if (p.y > canvas.height) particles.splice(idx, 1);
+                    });
+                } else if (selectedSeason === 'Summer') {
+                    // SUN RAY glows (ambient floating gold specks)
+                    if (particles.length < 30 && Math.random() < 0.05) {
+                        particles.push({
+                            x: Math.random() * canvas.width,
+                            y: canvas.height + 10,
+                            size: Math.random() * 8 + 4,
+                            speedY: -(Math.random() * 0.8 + 0.3),
+                            speedX: Math.random() * 0.6 - 0.3,
+                            opacity: Math.random() * 0.4 + 0.1
+                        });
+                    }
+                    particles.forEach((p, idx) => {
+                        p.y += p.speedY;
+                        p.x += p.speedX;
+                        ctx.fillStyle = `rgba(239, 186, 108, ${p.opacity})`; // gold
+                        ctx.shadowBlur = 10;
+                        ctx.shadowColor = '#efba6c';
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.shadowBlur = 0; // reset
+                        
+                        if (p.y < -20) particles.splice(idx, 1);
+                    });
+                }
+                
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // ── 5. INTERACTIVE 3D GLOBE ENGINE (CANVAS) ──
+        let globeRotationX = 0.2;
+        let globeRotationY = 0.8;
+        let isDraggingGlobe = false;
+        let prevMouseX = 0;
+        let prevMouseY = 0;
+
+        function initGlobe() {
+            const canvas = document.getElementById('globe-canvas');
+            const ctx = canvas.getContext('2d');
+            const tooltip = document.getElementById('globe-tooltip');
+            
+            // Adjust canvas density for sharp renders
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * 2;
+            canvas.height = rect.height * 2;
+            ctx.scale(2, 2);
+
+            const width = rect.width;
+            const height = rect.height;
+            const radius = width * 0.4;
+            const cx = width / 2;
+            const cy = height / 2;
+
+            // Register drag handles
+            canvas.addEventListener('mousedown', (e) => {
+                isDraggingGlobe = true;
+                prevMouseX = e.clientX;
+                prevMouseY = e.clientY;
+            });
+            window.addEventListener('mouseup', () => {
+                isDraggingGlobe = false;
+            });
+            window.addEventListener('mousemove', (e) => {
+                if (!isDraggingGlobe) {
+                    // Handle hover detection
+                    const rect = canvas.getBoundingClientRect();
+                    const mx = e.clientX - rect.left;
+                    const my = e.clientY - rect.top;
+                    
+                    let hovered = null;
+                    DESTINATIONS_DATA.forEach(d => {
+                        const proj = projectCoords(d.coords.lat, d.coords.lon, radius, cx, cy);
+                        if (proj.visible) {
+                            const dist = Math.hypot(mx - proj.x, my - proj.y);
+                            if (dist < 10) hovered = d;
+                        }
+                    });
+
+                    if (hovered) {
+                        tooltip.style.opacity = 1;
+                        tooltip.style.left = `${e.clientX}px`;
+                        tooltip.style.top = `${e.clientY - 10}px`;
+                        document.getElementById('tooltip-title').innerText = hovered.name;
+                        document.getElementById('tooltip-state').innerText = hovered.state;
+                        canvas.style.cursor = 'pointer';
+                    } else {
+                        tooltip.style.opacity = 0;
+                        canvas.style.cursor = 'grab';
+                    }
+                    return;
+                }
+                const dx = e.clientX - prevMouseX;
+                const dy = e.clientY - prevMouseY;
+                globeRotationY += dx * 0.005;
+                globeRotationX += dy * 0.005;
+                // Bound X rotation to prevent flipping upside down
+                globeRotationX = Math.max(-Math.PI/2.2, Math.min(Math.PI/2.2, globeRotationX));
+                prevMouseX = e.clientX;
+                prevMouseY = e.clientY;
+            });
+
+            // Click listener
+            canvas.addEventListener('click', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const mx = e.clientX - rect.left;
+                const my = e.clientY - rect.top;
+                
+                DESTINATIONS_DATA.forEach(d => {
+                    const proj = projectCoords(d.coords.lat, d.coords.lon, radius, cx, cy);
+                    if (proj.visible) {
+                        const dist = Math.hypot(mx - proj.x, my - proj.y);
+                        if (dist < 10) {
+                            showDestinationDetails(d.id);
+                        }
+                    }
+                });
+            });
+
+            // Transform mathematical lat/long to 3D projected coordinates on rotating sphere
+            function projectCoords(lat, lon, r, cx, cy) {
+                // Convert degrees to radians
+                const radLat = (lat * Math.PI) / 180;
+                const radLon = (lon * Math.PI) / 180;
+
+                // Spherical coordinate system standard translation
+                let x3 = r * Math.cos(radLat) * Math.sin(radLon);
+                let y3 = -r * Math.sin(radLat);
+                let z3 = r * Math.cos(radLat) * Math.cos(radLon);
+
+                // Rotate around X axis (pitch)
+                const cosX = Math.cos(globeRotationX);
+                const sinX = Math.sin(globeRotationX);
+                let y3_rotX = y3 * cosX - z3 * sinX;
+                let z3_rotX = y3 * sinX + z3 * cosX;
+
+                // Rotate around Y axis (yaw)
+                const cosY = Math.cos(globeRotationY);
+                const sinY = Math.sin(globeRotationY);
+                let x3_rotY = x3 * cosY + z3_rotX * sinY;
+                let z3_rotY = -x3 * sinY + z3_rotX * cosY;
+
+                // Orthographic projection - points with positive z3_rotY are on back of sphere
+                return {
+                    x: cx + x3_rotY,
+                    y: cy + y3_rotX,
+                    visible: z3_rotY > 0
+                };
+            }
+
+            // Internal Loop
+            function drawGlobe() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Globe sphere backdrop glow
+                ctx.beginPath();
+                ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#364d59';
+                ctx.shadowColor = '#efba6c';
+                ctx.shadowBlur = 12;
+                ctx.fill();
+                ctx.shadowBlur = 0; // reset
+
+                // Draw Latitude/Longitude grids
+                ctx.strokeStyle = 'rgba(239, 186, 108, 0.15)';
+                ctx.lineWidth = 1;
+                
+                // Lat lines
+                for (let lat = -60; lat <= 60; lat += 20) {
+                    ctx.beginPath();
+                    for (let lon = -180; lon <= 180; lon += 5) {
+                        const proj = projectCoords(lat, lon, radius, cx, cy);
+                        if (proj.visible) {
+                            if (lon === -180) ctx.moveTo(proj.x, proj.y);
+                            else ctx.lineTo(proj.x, proj.y);
+                        }
+                    }
+                    ctx.stroke();
+                }
+                
+                // Lon lines
+                for (let lon = -180; lon < 180; lon += 30) {
+                    ctx.beginPath();
+                    for (let lat = -90; lat <= 90; lat += 5) {
+                        const proj = projectCoords(lat, lon, radius, cx, cy);
+                        if (proj.visible) {
+                            if (lat === -90) ctx.moveTo(proj.x, proj.y);
+                            else ctx.lineTo(proj.x, proj.y);
+                        }
+                    }
+                    ctx.stroke();
+                }
+
+                // Draw destination landmark nodes
+                DESTINATIONS_DATA.forEach(d => {
+                    const proj = projectCoords(d.coords.lat, d.coords.lon, radius, cx, cy);
+                    if (proj.visible) {
+                        // Glowing pulse circles
+                        ctx.beginPath();
+                        ctx.arc(proj.x, proj.y, 6 + Math.sin(Date.now() * 0.005) * 2, 0, Math.PI * 2);
+                        ctx.fillStyle = 'rgba(239, 186, 108, 0.5)';
+                        ctx.fill();
+
+                        ctx.beginPath();
+                        ctx.arc(proj.x, proj.y, 3, 0, Math.PI * 2);
+                        ctx.fillStyle = '#efba6c';
+                        ctx.fill();
+
+                        // Label
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                        ctx.font = 'bold 8px Inter';
+                        ctx.fillText(d.name, proj.x + 8, proj.y + 3);
+                    }
+                });
+
+                // Auto rotate when not dragging
+                if (!isDraggingGlobe) {
+                    globeRotationY += 0.001;
+                }
+
+                requestAnimationFrame(drawGlobe);
+            }
+
+            drawGlobe();
+        }
+
+        // ── 6. DYNAMIC THEME SYSTEM ──
+        function setSeason(season) {
+            selectedSeason = season;
+            // Update seasonal button visual styles
+            document.querySelectorAll('.season-btn').forEach(btn => {
+                btn.classList.remove('border-gold', 'text-gold', 'bg-gold/10');
+            });
+            const activeBtn = document.getElementById(`btn-season-${season}`);
+            if (activeBtn) activeBtn.classList.add('border-gold', 'text-gold', 'bg-gold/10');
+            
+            // Re-render recommendations filter
+            renderRecommendations();
+        }
+
+        function selectMood(mood) {
+            selectedMood = mood;
+            const moodObj = MOODS_DATA[mood];
+            
+            // Apply Dynamic color accent shifts across components
+            document.documentElement.style.setProperty('--mood-glow-color', moodObj.themeColor + '44');
+            document.body.style.borderColor = moodObj.themeColor;
+            
+            // Highlight Mood Button card
+            document.querySelectorAll('.mood-card-element').forEach(card => {
+                card.classList.remove('border-gold', 'shadow-2xl', 'scale-105');
+                card.style.borderColor = '';
+            });
+            const activeCard = document.getElementById(`mood-card-${mood}`);
+            if (activeCard) {
+                activeCard.classList.add('shadow-2xl', 'scale-105');
+                activeCard.style.borderColor = moodObj.themeColor;
+            }
+
+            // Sync indicators
+            document.getElementById('active-mood-indicator').classList.remove('hidden');
+            document.getElementById('active-mood-indicator').style.borderColor = moodObj.themeColor;
+            document.getElementById('active-mood-dot').style.backgroundColor = moodObj.themeColor;
+            document.getElementById('active-mood-name').innerText = mood;
+            
+            document.getElementById('mobile-mood-indicator').classList.remove('hidden');
+            document.getElementById('mobile-mood-name').innerText = mood;
+
+            // Load Explanation card
+            const expPanel = document.getElementById('mood-detail-panel');
+            expPanel.classList.remove('hidden');
+            document.getElementById('mood-explanation-badge').className = `px-4 py-1.5 rounded-full text-xs font-bold tracking-widest bg-slate-50 text-[${moodObj.themeColor}] border border-gray-200 inline-block mb-4`;
+            document.getElementById('mood-explanation-title').innerText = `${mood} State Balance`;
+            document.getElementById('mood-explanation-text').innerText = moodObj.explanation;
+            document.getElementById('mood-explanation-img').src = moodObj.imgUrl;
+
+            // Benefits
+            const benefitsContainer = document.getElementById('mood-benefits-container');
+            benefitsContainer.innerHTML = '';
+            moodObj.benefits.forEach(b => {
+                benefitsContainer.innerHTML += `
+                    <span class="px-3.5 py-1.5 bg-gray-50 border border-gray-100 rounded-full text-xs font-bold text-darkBlue">
+                        <i class="fa-solid fa-circle-check text-green-500 mr-1.5"></i> ${b}
+                    </span>
+                `;
+            });
+
+            // Trigger scroll
+            document.getElementById('mood-detail-panel').scrollIntoView({ behavior: 'smooth' });
+
+            // Re-render recommendations
+            renderRecommendations();
+        }
+
+        // ── 7. RENDER RECOMMENDATIONS GRID ──
+        function renderRecommendations() {
+            const grid = document.getElementById('destinations-grid');
+            const title = document.getElementById('recommendations-title');
+            const subtitle = document.getElementById('recommendations-subtitle');
+            grid.innerHTML = '';
+
+            // Filter logic
+            let results = DESTINATIONS_DATA;
+            
+            if (selectedMood && selectedSeason) {
+                // strict match mood + matching current season array
+                results = DESTINATIONS_DATA.filter(dest => {
+                    return dest.moodMatch.includes(selectedMood) && dest.season.includes(selectedSeason);
+                });
+                
+                // Fallback / broadened query if none found
+                if (results.length === 0) {
+                    results = DESTINATIONS_DATA.filter(dest => dest.moodMatch.includes(selectedMood));
+                    subtitle.innerText = `Broadened search. Showing recommendations matching mood "${selectedMood}" for other seasons.`;
+                } else {
+                    subtitle.innerText = `Showing optimal escapes matching mood "${selectedMood}" during ${selectedSeason}.`;
+                }
+                title.innerText = `${selectedMood} Mood Escapes`;
+            }
+
+            if (results.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-16 text-center text-gray-400 font-semibold border-2 border-dashed border-gray-200 rounded-3xl">
+                        <i class="fa-solid fa-face-frown text-3xl mb-3 text-gold"></i>
+                        <p>No exact destination mappings match this specific criteria. Try selecting other moods!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Loop cards
+            results.forEach(dest => {
+                const isFavorite = currentUser && currentUser.favorites && currentUser.favorites.includes(dest.name);
+                const heartClass = isFavorite ? 'fa-solid fa-heart text-red-500' : 'fa-regular fa-heart text-gray-400';
+                
+                grid.innerHTML += `
+                    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-xl">
+                        <div class="relative h-56 overflow-hidden">
+                            <img src="${dest.heroImage}" alt="${dest.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <!-- Floating tags -->
+                            <div class="absolute top-4 left-4 flex flex-col gap-2">
+                                <span class="px-3 py-1 bg-darkBlue/80 backdrop-blur-sm text-white text-[9px] font-black uppercase tracking-widest rounded-full">${dest.state}</span>
+                            </div>
+                            <button onclick="toggleBookmark('${dest.name}', event)" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm shadow-md flex items-center justify-center transition-all hover:scale-110 active:scale-95">
+                                <i class="${heartClass}"></i>
+                            </button>
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-2">
+                                    <span>${dest.landscape.join(' • ')}</span>
+                                    <span class="text-gold"><i class="fa-solid fa-star mr-1"></i>${dest.rating}</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-darkBlue mb-2">${dest.name}</h3>
+                                <p class="text-xs text-gray-500 leading-relaxed mb-6">${dest.description}</p>
+                            </div>
+                            <div class="flex justify-between items-center border-t border-gray-50 pt-4">
+                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Season: <strong class="text-darkBlue">${dest.season.join('/')}</strong></span>
+                                <button onclick="showDestinationDetails(${dest.id})" class="px-5 py-2 bg-darkBlue text-white font-bold text-xs uppercase tracking-wider hover:bg-gold hover:text-darkBlue transition-all">
+                                    EXPLORE
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // ── 8. DETAILED MODAL CONTROLS ──
+        let activeModalDest = null;
+        function showDestinationDetails(id) {
+            const dest = DESTINATIONS_DATA.find(d => d.id === id);
+            if (!dest) return;
+            activeModalDest = dest;
+
+            document.getElementById('modal-hero-img').src = dest.heroImage;
+            document.getElementById('modal-destination-title').innerText = dest.name;
+            document.getElementById('modal-badge-region').innerText = `${dest.region}, ${dest.state}`;
+            document.getElementById('modal-long-desc').innerText = dest.longDescription;
+            document.getElementById('modal-best-season').innerText = dest.bestTimeToVisit;
+            document.getElementById('modal-languages').innerText = dest.localLanguages;
+            document.getElementById('modal-maps-link').href = dest.mapsUrl;
+
+            // Safety / Eco ratings stars
+            document.getElementById('modal-safety').innerText = '⭐'.repeat(dest.safetyRating);
+            document.getElementById('modal-sustain').innerText = '⭐'.repeat(dest.sustainabilityScore);
+
+            // Highlights
+            const highlightContainer = document.getElementById('modal-highlights-container');
+            highlightContainer.innerHTML = '';
+            dest.landscape.forEach(l => {
+                highlightContainer.innerHTML += `<span class="px-3 py-1 bg-gray-100 text-xs font-bold text-darkBlue rounded-full">${l}</span>`;
+            });
+            dest.moodMatch.forEach(m => {
+                highlightContainer.innerHTML += `<span class="px-3 py-1 bg-yellow-50 border border-yellow-200 text-xs font-bold text-yellow-600 rounded-full">${m}</span>`;
+            });
+
+            // Itinerary
+            document.getElementById('modal-itinerary-d1').innerText = dest.itinerary.day1;
+            document.getElementById('modal-itinerary-d2').innerText = dest.itinerary.day2;
+            document.getElementById('modal-itinerary-d3').innerText = dest.itinerary.day3;
+
+            // Food recommendations
+            const foodContainer = document.getElementById('modal-foods-container');
+            foodContainer.innerHTML = '';
+            dest.localFood.forEach(food => {
+                foodContainer.innerHTML += `
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 shadow-sm">
+                        <span class="text-lg mb-2 block">🍛</span>
+                        <h4 class="font-bold text-sm text-darkBlue mb-1">${food.name}</h4>
+                        <p class="text-[11px] text-gray-500 leading-relaxed">${food.description}</p>
+                    </div>
+                `;
+            });
+
+            // Weather
+            const weatherContainer = document.getElementById('modal-weather-info');
+            weatherContainer.innerHTML = `
+                <div class="flex justify-between border-b border-gray-100 pb-1.5">
+                    <span class="text-gray-400">☀️ Summer:</span> <span class="font-bold text-darkBlue">${dest.weatherInfo.summer}</span>
+                </div>
+                <div class="flex justify-between border-b border-gray-100 pb-1.5">
+                    <span class="text-gray-400">🌧️ Monsoon:</span> <span class="font-bold text-darkBlue">${dest.weatherInfo.monsoon}</span>
+                </div>
+                <div class="flex justify-between border-b border-gray-100 pb-1.5">
+                    <span class="text-gray-400">❄️ Winter:</span> <span class="font-bold text-darkBlue">${dest.weatherInfo.winter}</span>
+                </div>
+            `;
+
+            // Travel tips
+            const tipsContainer = document.getElementById('modal-travel-tips');
+            tipsContainer.innerHTML = '';
+            dest.travelTips.forEach(tip => {
+                tipsContainer.innerHTML += `<li>${tip}</li>`;
+            });
+
+            // Sync bookmark button icon
+            const btnBookmark = document.getElementById('modal-btn-bookmark');
+            if (currentUser && currentUser.favorites && currentUser.favorites.includes(dest.name)) {
+                btnBookmark.innerHTML = `<i class="fa-solid fa-heart text-red-500"></i> Saved Escape`;
+            } else {
+                btnBookmark.innerHTML = `<i class="fa-regular fa-heart"></i> Save Escape`;
+            }
+
+            // Open Modal view
+            document.getElementById('details-modal').classList.remove('hidden');
+        }
+
+        function showDestinationDetailsDirect(name) {
+            const dest = DESTINATIONS_DATA.find(d => d.name === name);
+            if (dest) showDestinationDetails(dest.id);
+        }
+
+        function closeDetailsModal() {
+            document.getElementById('details-modal').classList.add('hidden');
+        }
+
+        // Bookmark toggle
+        function toggleBookmark(destName, event) {
+            if (event) event.stopPropagation();
+            
+            if (!currentUser) {
+                alert("Please login first to bookmark your favorite destinations!");
+                openAuthModal('login');
+                return;
+            }
+
+            if (!currentUser.favorites) currentUser.favorites = [];
+            
+            const idx = currentUser.favorites.indexOf(destName);
+            if (idx === -1) {
+                currentUser.favorites.push(destName);
+            } else {
+                currentUser.favorites.splice(idx, 1);
+            }
+
+            saveState();
+            renderRecommendations();
+            updateDashboardUI();
+        }
+
+        function toggleBookmarkModal() {
+            if (activeModalDest) {
+                toggleBookmark(activeModalDest.name);
+                // Update modal button state
+                const btnBookmark = document.getElementById('modal-btn-bookmark');
+                if (currentUser && currentUser.favorites && currentUser.favorites.includes(activeModalDest.name)) {
+                    btnBookmark.innerHTML = `<i class="fa-solid fa-heart text-red-500"></i> Saved Escape`;
+                } else {
+                    btnBookmark.innerHTML = `<i class="fa-regular fa-heart"></i> Save Escape`;
+                }
+            }
+        }
+
+        // Learn More Modals
+        function openLearnMoreModal() {
+            document.getElementById('learn-more-modal').classList.remove('hidden');
+        }
+        function closeLearnMoreModal() {
+            document.getElementById('learn-more-modal').classList.add('hidden');
+        }
+
+        // ── 9. AUTHENTICATION & SESSION SYSTEM ──
+        let activeAuthTab = 'login';
+        
+        function openAuthModal(tab = 'login') {
+            document.getElementById('auth-modal').classList.remove('hidden');
+            toggleAuthTab(tab);
+        }
+        
+        function closeAuthModal() {
+            document.getElementById('auth-modal').classList.add('hidden');
+        }
+
+        function toggleAuthTab(tab) {
+            activeAuthTab = tab;
+            const tabLogin = document.getElementById('auth-tab-login');
+            const tabSignup = document.getElementById('auth-tab-signup');
+            const formLogin = document.getElementById('form-login');
+            const formSignup = document.getElementById('form-signup');
+
+            if (tab === 'login') {
+                tabLogin.className = "w-1/2 py-4 text-darkBlue border-b-2 border-gold text-sm";
+                tabSignup.className = "w-1/2 py-4 text-gray-400 border-b-2 border-transparent text-sm";
+                formLogin.classList.remove('hidden');
+                formSignup.classList.add('hidden');
+            } else {
+                tabLogin.className = "w-1/2 py-4 text-gray-400 border-b-2 border-transparent text-sm";
+                tabSignup.className = "w-1/2 py-4 text-darkBlue border-b-2 border-gold text-sm";
+                formLogin.classList.add('hidden');
+                formSignup.classList.remove('hidden');
+            }
+        }
+
+        // Auth Submissions (Simulated DB write/match)
+        function handleAuthSubmit(e, action) {
+            e.preventDefault();
+
+            if (action === 'login') {
+                const email = document.getElementById('login-email').value;
+                const pass = document.getElementById('login-pass').value;
+
+                // Validate admin user shortcut
+                if (email === 'admin@travel.com') {
+                    alert("Admin accounts must go through the dedicated Admin dashboard portal.");
+                    return;
+                }
+
+                // Match with registered list
+                const matched = mockedUsers.find(u => u.email === email);
+                if (matched) {
+                    currentUser = {
+                        name: matched.name,
+                        email: matched.email,
+                        favorites: ['Goa'] // default favorite
+                    };
+                    saveState();
+                    updateAuthUI();
+                    closeAuthModal();
+                    switchTab('dashboard');
+                } else {
+                    // Auto-register user to make demo convenient!
+                    currentUser = {
+                        name: 'Guest Traveler',
+                        email: email,
+                        favorites: []
+                    };
+                    mockedUsers.push({ name: 'Guest Traveler', email: email, joined: new Date().toISOString().split('T')[0] });
+                    saveState();
+                    updateAuthUI();
+                    closeAuthModal();
+                    switchTab('dashboard');
+                    alert("Logged in! Account created automatically for demo convenience.");
+                }
+            } else {
+                // Register
+                const name = document.getElementById('signup-name').value;
+                const email = document.getElementById('signup-email').value;
+
+                currentUser = {
+                    name: name,
+                    email: email,
+                    favorites: []
+                };
+                mockedUsers.push({ name: name, email: email, joined: new Date().toISOString().split('T')[0] });
+                saveState();
+                updateAuthUI();
+                renderUsers();
+                closeAuthModal();
+                switchTab('dashboard');
+                alert("Account created successfully!");
+            }
+        }
+
+        // Google Single Sign-On Simulation
+        function triggerGoogleAuth() {
+            currentUser = {
+                name: 'Devendra Singh',
+                email: 'dev@heritage.in',
+                favorites: ['Goa', 'Munnar']
+            };
+            saveState();
+            updateAuthUI();
+            closeAuthModal();
+            switchTab('dashboard');
+            alert("Authorized session successfully using Google Single Sign-on.");
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            saveState();
+            updateAuthUI();
+            switchTab('home');
+            alert("Signed out successfully.");
+        }
+
+        // Sync visual UI with state
+        function updateAuthUI() {
+            const container = document.getElementById('auth-buttons-container');
+            const mobileContainer = document.getElementById('mobile-auth-container');
+
+            if (currentUser) {
+                // User logged in
+                container.innerHTML = `
+                    <button onclick="switchTab('dashboard')" class="px-6 py-2 bg-darkBlue text-white font-bold rounded-none hover:bg-gold hover:text-darkBlue transition-all duration-300 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-user"></i> ${currentUser.name.split(' ')[0].toUpperCase()}
+                    </button>
+                `;
+                mobileContainer.innerHTML = `
+                    <button onclick="switchTab('dashboard')" class="w-full py-3 bg-darkBlue text-white font-bold mb-2">MY DASHBOARD</button>
+                    <button onclick="handleLogout()" class="w-full py-3 border border-red-500 text-red-500 font-bold">LOGOUT</button>
+                `;
+                updateDashboardUI();
+            } else {
+                // Guest
+                container.innerHTML = `
+                    <button onclick="openAuthModal('login')" class="px-6 py-2 border border-darkBlue text-darkBlue font-bold rounded-none hover:bg-darkBlue hover:text-white transition-all duration-300 text-sm">
+                        LOGIN
+                    </button>
+                `;
+                mobileContainer.innerHTML = `
+                    <button onclick="openAuthModal('login')" class="w-full py-3 bg-darkBlue text-white font-bold">LOGIN</button>
+                `;
+            }
+        }
+
+        // ── 10. USER DASHBOARD SYNCS ──
+        function updateDashboardUI() {
+            if (!currentUser) return;
+
+            document.getElementById('dash-username').innerText = currentUser.name;
+            
+            // Stats recalculations
+            const favCount = currentUser.favorites ? currentUser.favorites.length : 0;
+            document.getElementById('stat-saved').innerText = favCount;
+            document.getElementById('stat-visited').innerText = userPlans.length;
+            document.getElementById('stat-reviews').innerText = favCount + 2;
+
+            // Render Saved Escapes Cards
+            const savedContainer = document.getElementById('saved-escapes-container');
+            savedContainer.innerHTML = '';
+
+            if (favCount === 0) {
+                savedContainer.innerHTML = `
+                    <div class="col-span-full py-12 text-center text-gray-400 font-semibold border-2 border-dashed border-gray-200 rounded-2xl">
+                        No saved escapes yet! Browse home recommended cards and tap the heart icon to save.
+                    </div>
+                `;
+                return;
+            }
+
+            currentUser.favorites.forEach(favName => {
+                const dest = DESTINATIONS_DATA.find(d => d.name === favName);
+                if (dest) {
+                    savedContainer.innerHTML += `
+                        <div class="bg-white p-5 rounded-2xl border border-gray-150 shadow-sm flex gap-4 items-center">
+                            <img src="${dest.heroImage}" alt="${dest.name}" class="w-20 h-20 rounded-xl object-cover">
+                            <div class="flex-grow">
+                                <h4 class="font-bold text-darkBlue">${dest.name}</h4>
+                                <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mt-0.5">${dest.state}</span>
+                                <button onclick="showDestinationDetails(${dest.id})" class="text-[11px] font-bold text-gold hover:underline mt-2 inline-block">Explore Details</button>
+                            </div>
+                            <button onclick="toggleBookmark('${dest.name}')" class="text-red-500 hover:scale-110 p-2"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        // ── 11. TRAVEL PLANNER SYNCS ──
+        function renderPlans() {
+            const tbody = document.getElementById('plans-table-body');
+            tbody.innerHTML = '';
+
+            if (userPlans.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="p-8 text-center text-gray-400 font-semibold italic">No travel plans created yet. Use the assistant above to schedules escapes.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            userPlans.forEach((p, idx) => {
+                tbody.innerHTML += `
+                    <tr class="border-b border-gray-100 text-xs font-medium text-darkBlue">
+                        <td class="p-4 font-bold text-sm">${p.state}</td>
+                        <td class="p-4 text-gray-500">${p.start} to ${p.end}</td>
+                        <td class="p-4"><span class="px-2.5 py-1 bg-blue-50 text-blue-600 rounded-full text-[10px] font-bold">${p.style}</span></td>
+                        <td class="p-4"><span class="px-2.5 py-1 bg-yellow-50 text-yellow-600 rounded-full text-[10px] font-bold">${p.budget}</span></td>
+                        <td class="p-4 text-gray-400 italic">${p.notes || 'No extra notes.'}</td>
+                        <td class="p-4 text-center">
+                            <button onclick="deletePlan(${idx})" class="text-red-500 hover:text-red-600 text-sm transition-colors p-2"><i class="fa-solid fa-trash-can"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function handleCreatePlan(e) {
+            e.preventDefault();
+            const state = document.getElementById('plan-state').value;
+            const start = document.getElementById('plan-start').value;
+            const end = document.getElementById('plan-end').value;
+            const budget = document.getElementById('plan-budget').value;
+            const style = document.getElementById('plan-style').value;
+            const notes = document.getElementById('plan-notes').value;
+
+            if (new Date(start) > new Date(end)) {
+                alert("Start date cannot be after the end date!");
+                return;
+            }
+
+            userPlans.push({ state, start, end, budget, style, notes });
+            saveState();
+            renderPlans();
+            updateDashboardUI();
+            
+            // Reset Form
+            e.target.reset();
+            alert("New travel itinerary has been added to your schedule!");
+        }
+
+        function deletePlan(idx) {
+            if (confirm("Are you sure you want to remove this itinerary from your planner?")) {
+                userPlans.splice(idx, 1);
+                saveState();
+                renderPlans();
+                updateDashboardUI();
+            }
+        }
+
+        // ── 12. ADMINISTRATOR PANEL GATEWAY ──
+        let isAdminAuthorized = false;
+
+        function handleAdminLogin() {
+            const pass = document.getElementById('admin-pass-input').value;
+            if (pass === 'admin123') {
+                isAdminAuthorized = true;
+                document.getElementById('admin-gate').classList.add('hidden');
+                document.getElementById('admin-panel').classList.remove('hidden');
+                renderUsers();
+            } else {
+                alert("Invalid password clearance credentials. Access denied!");
+            }
+        }
+
+        function handleAdminLogout() {
+            isAdminAuthorized = false;
+            document.getElementById('admin-gate').classList.remove('hidden');
+            document.getElementById('admin-panel').classList.add('hidden');
+            document.getElementById('admin-pass-input').value = '';
+        }
+
+        function renderUsers() {
+            const tbody = document.getElementById('admin-users-table');
+            const totalCount = document.getElementById('admin-total-users');
+            tbody.innerHTML = '';
+            
+            totalCount.innerText = mockedUsers.length;
+
+            mockedUsers.forEach((u, idx) => {
+                tbody.innerHTML += `
+                    <tr class="border-b border-gray-100 text-xs font-semibold text-darkBlue">
+                        <td class="p-4 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-darkBlue/5 text-darkBlue flex items-center justify-center font-bold">${u.name[0]}</div>
+                            <span>${u.name}</span>
+                        </td>
+                        <td class="p-4 text-gray-500 font-mono">${u.email}</td>
+                        <td class="p-4 text-gray-400">${u.joined}</td>
+                        <td class="p-4 text-center">
+                            <span class="px-2.5 py-1 bg-green-50 text-green-600 border border-green-200 rounded-full text-[9px] font-black uppercase">Active</span>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>

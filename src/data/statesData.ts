@@ -44,7 +44,7 @@ export const STATES: StateInfo[] = [
   {
     name: "Andhra Pradesh",
     slug: "andhra-pradesh",
-    image: "/images/andhra-pradesh.png",
+    image: "/images/andhra-pradesh.jpg",
     description: "Land of temples, beaches, and the famous Tirupati shrine.",
     highlights: ["Tirupati", "Araku Valley", "Vizag Beach"],
     emoji: "🏛️",
@@ -60,7 +60,7 @@ Festivals like Ugadi and Sankranti are celebrated with great enthusiasm. The cui
     culturalImages: [
       { url: "https://static.toiimg.com/thumb/msid-107275633%2Cwidth-1280%2Cheight-720%2Cimgsize-232878%2Cresizemode-72%2Coverlay-toi_sw%2Cpt-32%2Cy_pad-40/photo.jpg", name: "Tirupati Balaji" },
       { url: "https://blog.redbus.in/wp-content/uploads/2021/11/shutterstock_1559121689.jpg", name: "Araku Valley" },
-      { url: "https://rest.techbehemoths.com/storage/images/countries/india/visakhapatnam/603f779e133af.jpg", name: "Vizag Port" },
+      { url: "https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?w=600&h=400&fit=crop", name: "Vizag Port" },
       { url: "https://www.iasgyan.in/ig-uploads/images/MAKAR_SAKRANTI,_LOHRI,_BIHU_AND_PONGAL.jpg", name: "Sankranti Festival" }
     ],
     moods: ["Excited"],
@@ -258,7 +258,7 @@ Navratri is celebrated with Garba dance across the state. The food is mostly veg
 
 Festivals like Teej and harvest celebrations are important. The food is hearty, including roti, dairy, and local dishes. Haryana reflects strength, simplicity, and heritage.`,
     culturalImages: [
-      { url: "https://magarticles.magzter.com/articles/245/254738/5a25105737c7c/Kurukshetra.jpg", name: "Kurukshetra Site" },
+      { url: "https://images.unsplash.com/photo-1600100397990-a4a83a1524e7?w=600&h=400&fit=crop", name: "Kurukshetra Site" },
       { url: "https://media.istockphoto.com/id/1223368332/photo/yadavindra-gardens-also-known-as-pinjore-gardens.jpg?s=170667a&w=0&k=20&c=cc9_DQzLNBlDrBrCmerzfao2k9yULE_s3Y01IFBlDqM=", name: "Pinjore Garden" },
       { url: "https://www.holidify.com/images/cmsuploads/articles/239.jpg", name: "Surajkund Fair" },
       { url: "https://www.japjitravel.com/blog/wp-content/uploads/2024/04/Besan-Masala-Roti-Haryana.webp", name: "BesanMasala Roti" }
@@ -308,7 +308,7 @@ Festivals like Kullu Dussehra bring communities together. The food is simple and
 
 Festivals and cultural traditions reflect both Islamic and local influences. The cuisine includes Wazwan dishes and Kahwa. It’s a place of beauty and peace.`,
     culturalImages: [
-      { url: "https://www.grasshopperyatra.com/assets/images/main/1711627155789.jpg", name: "Tulip Fields Valley" },
+      { url: "https://images.unsplash.com/photo-1540317580114-ed684c82b9b2?w=600&h=400&fit=crop", name: "Tulip Fields Valley" },
       { url: "https://images.news18.com/ibnlive/uploads/2018/09/Floating-Vegetable-Market-in-Dal-Lake-5.jpg", name: "Floating Market" },
       { url: "https://shikaraboatalleppey.com/wp-content/uploads/2024/07/p3.jpg", name: "Kashmiri Boat House" },
       { url: "https://media.cnn.com/api/v1/images/stellar/prod/240112092102-01-gulmarg-snow.jpg?q=w_1110,c_fill", name: "Gulmarg Snow" }
@@ -335,7 +335,7 @@ Festivals like Sarhul celebrate nature. The food is simple and organic. The stat
     culturalImages: [
       { url: "https://img1.picmix.com/output/stamp/normal/9/0/8/8/268809_840ec.gif", name: "Fantasy Waterfall" },
       { url: "https://i0.wp.com/wordzz.com/wp-content/uploads/2023/04/Betla-National-Park-Elephant.jpeg?resize=1536%2C975&ssl=1", name: "Wild Elephant" },
-      { url: "/images/dhuska.png", name: "Local Cuisine (Dhuska)" },
+      { url: "/images/dhuska.jpg", name: "Local Cuisine (Dhuska)" },
       { url: "https://www.namasteindiatrip.org/wp-content/uploads/2022/12/Karam-Dance.jpg", name: "Karam Dance" }
     ],
     moods: ["Sad"],
@@ -359,7 +359,7 @@ Festivals like Sarhul celebrate nature. The food is simple and organic. The stat
 Festivals like Dasara are grandly celebrated. The food includes dosa, idli, and regional specialties. Karnataka offers diversity in culture and lifestyle.`,
     culturalImages: [
       { url: "https://media.tripinvites.com/places/mysore/mysore-palace/mysore-palace-in-lights-featured.jpg", name: "Mysore Palace" },
-      { url: "https://im.hunt.in/cg/Mysure/City-Guide/mysoresilkweaving.jpg", name: "Mysore Silk" },
+      { url: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&h=400&fit=crop", name: "Mysore Silk" },
       { url: "https://media.istockphoto.com/id/519406045/photo/bangalore-skyline-india.jpg?b=1&s=170667a&w=0&k=20&c=hJL5CjKW2TIECR_D_Kyf1XURn7RokoTCBQi3AByf0PQ=", name: "Bangalore Skyline" },
       { url: "https://s7ap1.scene7.com/is/image/incredibleindia/vittala-temple-hampi-karnataka-3-attr-hero?qlt=82&ts=1726721364446", name: "Vittala Temple Hampi" }
     ],
@@ -419,7 +419,7 @@ Festivals and traditions vary across regions. The food is simple yet flavorful. 
   {
     name: "Maharashtra",
     slug: "maharashtra",
-    image: "/images/vadapav.png",
+    image: "/images/vadapav.jpg",
     description: "Bollywood, Ajanta-Ellora caves, and vibrant Mumbai.",
     highlights: ["Mumbai", "Ajanta & Ellora", "Lonavala"],
     emoji: "🎬",
@@ -560,7 +560,7 @@ Festivals like Rath Yatra attract millions of devotees. The food includes rice-b
     culturalImages: [
       { url: "https://imvoyager.com/wp-content/uploads/2017/10/Jagannath-Temple-Puri.jpg", name: "Jagannath Temple" },
       { url: "https://purimarkets.com/images/slide40.JPG", name: "Chilika Lake" },
-      { url: "/images/rath_yatra.png", name: "Rath Yatra" },
+      { url: "/images/rath_yatra.jpg", name: "Rath Yatra" },
       { url: "https://shreejagannathapuri.com/wp-content/uploads/2025/05/ChatGPT-Image-May-27-2025-07_23_00-PM-1.png", name: "shreejagannathapuri Temple" }
     ],
     moods: [],
