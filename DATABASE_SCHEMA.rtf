@@ -1,0 +1,91 @@
+{\rtf1\ansi\deff0
+{\fonttbl{\f0 Times New Roman;}{\f1 Courier New;}}
+\fs36\b Database Schema — Indian Tourism App\b0\fs24\par
+\par
+This document summarizes the MongoDB (Mongoose) schema used in the project, suitable for inclusion in an academic report.\par
+\par
+\b Overview\b0\par
+\bullet\ Database: MongoDB (Mongoose)\par
+\bullet\ Models covered: User, Destination\par
+\par
+\b Models\b0\par
+\par
+\b User\b0\par
+Collection name: users (model User)\par
+Primary key: _id (ObjectId)\par
+\par
+Fields:\par
+\bullet\ name: String, required\par
+\bullet\ email: String, required, unique, lowercase\par
+\bullet\ password: String, required\par
+\bullet\ googleId: String, unique, sparse (optional)\par
+\bullet\ image: String, default null\par
+\bullet\ lastLogin: Date, default null\par
+\bullet\ preferredMood: String, enum [Happy, Sad, Lonely, Romantic, Adventurous, Stressed, Calm, Excited, Spiritual], default null\par
+\bullet\ preferredSeason: String, enum [Summer, Monsoon, Winter, Spring], default null\par
+\bullet\ preferredBudget: String, enum [Low, Medium, Luxury], default Medium\par
+\bullet\ preferredTravelType: String, enum [Solo, Couple, Friends, Family], default null\par
+\bullet\ preferredLandscape: String, enum [Beach, Mountains, Desert, Forest, Hill Station, City, Backwaters], default null\par
+\bullet\ favoriteDestinations: Array (Mixed), default []\par
+\bullet\ moodHistory: Array of subdocuments { mood: String, season: String, timestamp: Date }\par
+\bullet\ travelJournal: Array of subdocuments { destination: String, entry: String, visitDate: Date, images: [String], rating: Number, createdAt: Date }\par
+\bullet\ plannedTrips: Array of subdocuments { title: String, startDate: Date, endDate: Date, destinations: [String], notes: String }\par
+\bullet\ darkMode: Boolean, default false\par
+Timestamps: createdAt, updatedAt\par
+\par
+Notes:\par
+- favoriteDestinations is flexible (Mixed) — may store destination IDs or embedded objects.\par
+\par
+\b Destination\b0\par
+Collection name: destinations (model Destination)\par
+Primary key: _id (ObjectId)\par
+\par
+Fields:\par
+\bullet\ name: String, required, unique\par
+\bullet\ slug: String, required, unique\par
+\bullet\ state: String\par
+\bullet\ region: String\par
+\bullet\ latitude: Number\par
+\bullet\ longitude: Number\par
+\bullet\ description: String\par
+\bullet\ longDescription: String\par
+\bullet\ heroImage: String\par
+\bullet\ gallery: [String]\par
+\bullet\ bestTimeToVisit: [String]\par
+\bullet\ season: [String], enum [Summer, Monsoon, Winter, Spring]\par
+\bullet\ moodMatch: [String], enum [Happy, Sad, Lonely, Romantic, Adventurous, Stressed, Calm, Excited, Spiritual]\par
+\bullet\ landscape: [String], enum [Beach, Mountains, Desert, Forest, Hill Station, City, Backwaters]\par
+\bullet\ budget: subdocument { low: { daily: Number, description: String }, medium: { daily: Number, description: String }, luxury: { daily: Number, description: String } }\par
+\bullet\ itinerary: subdocument { day1: String, day2: String, day3: String }\par
+\bullet\ nearbyAttractions: [{ name: String, distance: String, description: String }]\par
+\bullet\ localFood: [{ name: String, description: String, whereToTry: String }]\par
+\bullet\ culturalHighlights: [String]\par
+\bullet\ weatherInfo: { summer: String, monsoon: String, winter: String, spring: String }\par
+\bullet\ safetyRating: Number (1-5)\par
+\bullet\ sustainabilityScore: Number (1-5)\par
+\bullet\ crowdLevel: String enum [Low, Medium, High]\par
+\bullet\ localLanguages: [String]\par
+\bullet\ travelTips: [String]\par
+\bullet\ mapsUrl: String\par
+\bullet\ rating: Number (1-5), default 0\par
+\bullet\ reviews: [{ userId: ObjectId, userName: String, rating: Number, text: String, createdAt: Date }]\par
+Timestamps: createdAt, updatedAt\par
+\par
+Notes:\par
+- reviews.userId references a User _id (ObjectId) — relationship between users and destination reviews.\par
+\par
+\b ER Diagram (textual)\b0\par
+USER (1) -- (0..*) REVIEW -- (0..*) DESTINATION\par
+\par
+USER: _id, name, email\par
+DESTINATION: _id, name, slug\par
+REVIEW (embedded in Destination.reviews): userId (ObjectId), userName, rating, text, createdAt\par
+\par
+---\par
+\b How to cite these schemas\b0\par
+- Files: src/models/User.ts and src/models/Destination.ts\par
+- Connection: src/lib/mongodb.ts (uses environment variable MONGODB_URI)\par
+\par
+---\par
+If you want a relational-table version or a PDF export, tell me which and I will create it.\par
+}
