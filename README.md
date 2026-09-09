@@ -50,7 +50,7 @@ An emotion-driven, AI-powered web application that recommends Indian tourism des
 - npm or yarn
 - MongoDB
 
-### Installation
+### Installations
 
 1. **Install dependencies**
    ```bash
