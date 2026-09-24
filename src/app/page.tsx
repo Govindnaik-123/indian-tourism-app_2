@@ -129,7 +129,7 @@ export default function Home() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1.2, ease: "easeOut" }}
                     >
-                        <h1 className="hero-title mb-8">Experience the magic <br /> of  <span className="accent-gold">India</span></h1>
+                        <h1 className="hero-title mb-8">Experience the magic <br /> of  <span className="accent-gold">Incredible India</span></h1>
                         <p className="text-lg md:text-xl text-white/80 mb-12 font-medium max-w-2xl mx-auto leading-relaxed tracking-wide uppercase">
                             Explore the rich heritage, vibrant cultures, and breathtaking landscapes <br className="hidden md:block" /> of the Indian subcontinent.
                         </p>
